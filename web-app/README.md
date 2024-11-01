@@ -1,39 +1,25 @@
-# Material UI - Vite.js in TypeScript example
+# Liga Tenis Málaga - Web Application
 
-## How to use
+Data explorer with in-process OLAP database, using data retrieved from the webiste.
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+## Tech Stack
 
-<!-- #default-branch-switch -->
+### Programming Language
 
-```bash
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2 material-ui-master/examples/material-ui-vite-ts
-cd material-ui-vite-ts
-```
+[TypeScript](https://www.typescriptlang.org)
 
-Install it and run:
+### Frontend
 
-```bash
-npm install
-npm run dev
-```
+- UI Library: [React](https://react.dev)
+- Tooling: [Vite](https://vitejs.dev)
+- Component Library: [Material-UI](https://mui.com/material-ui/)
+- Client-Side Routing: [React Router](https://reactrouter.com/en/main)
+- Query Caching: [React Query](https://tanstack.com/query)
+- Internationalization: [React Intl](https://formatjs.io/docs/react-intl/)
 
-or:
+### Backend
 
-<!-- #default-branch-switch -->
+In the beginning, this is going to be an application without login. All the information is publicly available. We might add authentication/authorization in the future if we want to restrict access to some information.
 
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/material-ui-vite-ts)
+We are going to use an in-process analytical SQL database for the browser, [DuckDB-Wasm](https://duckdb.org), with a web assembly engine so no need for any kind of backend API because the queries will be executed directly within the web browser.
 
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/mui/material-ui/tree/master/examples/material-ui-vite-ts)
-
-## The idea behind the example
-
-This example uses [Vite.js](https://github.com/vitejs/vite).
-It includes `@mui/material` and its peer dependencies, including [Emotion](https://emotion.sh/docs/introduction), the default style engine in Material UI v6.
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation and continue by browsing the [templates](https://mui.com/material-ui/getting-started/templates/) section.
