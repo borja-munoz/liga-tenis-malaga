@@ -49,7 +49,9 @@ export function useCycles(playerName: string) {
     SELECT group_number,
            cy.cycle_order as cycle,
            cy.season_id as season,
-           cy.start_date 
+           cy.start_date,
+           cs.position,
+           cs.points
     FROM cycle_standings cs
          INNER JOIN players pl ON cs.player_id = pl.id
          INNER JOIN cycles cy ON cs.cycle_id = cy.id

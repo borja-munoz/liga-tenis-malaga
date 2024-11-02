@@ -31,7 +31,16 @@ export const messages = {
     matchesRetired: "Matches Retired",
 
     // Cycles
-    cicles: "Cycles",
+    seasons: "Seasons",
+    cycles: "Cycles",
+    bestGroup: "Best Group",
+    bestPosition: "Best Position",
+    totalPoints: "Total Points",
+    season: "Season",
+    cycle: "Cycle",
+    group: "Group",
+    position: "Position",
+    date: "Date",
   },
 
   [LOCALES.SPANISH]: {
@@ -63,7 +72,16 @@ export const messages = {
     matchesRetired: "Partidos Retirados",
 
     // Cycles
+    seasons: "Temporadas",
     cycles: "Ciclos",
+    bestGroup: "Mejor Grupo",
+    bestPosition: "Mejor Posición",
+    totalPoints: "Puntos Totales",
+    season: "Temporada",
+    cycle: "Ciclo",
+    group: "Grupo",
+    position: "Posición",
+    date: "Fecha",
   },
 
 };
