@@ -15,6 +15,7 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@tanstack/react-query": "^5.59.16",
+    "echarts": "^5.5.1",
     "react": "latest",
     "react-dom": "latest",
     "react-intl": "^6.8.4",
