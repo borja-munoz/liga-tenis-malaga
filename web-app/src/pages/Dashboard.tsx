@@ -44,11 +44,11 @@ export default function Dashboard() {
           <Grid container direction="column" spacing={3}>
             {playerData && (
               <Grid container>
-                <Grid size={12}>
+                {/* <Grid size={12}>
                   <span>
                     <FormattedMessage id="players" />: {playerData.length}
                   </span>
-                </Grid>
+                </Grid> */}
                 <Grid size={12}>
                   <Autocomplete
                     value={selectedPlayer}
