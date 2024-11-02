@@ -1086,19 +1086,85 @@ CREATE TABLE cycle_standings (
   target_group VARCHAR,
   player_id INTEGER,
   points INTEGER,
-  games_played INTEGER,
-  games_won INTEGER,
-  games_lost INTEGER,
-  games_not_played INTEGER,
+  matches_won INTEGER,
+  matches_lost INTEGER,
+  matches_not_played INTEGER,
   sets_won INTEGER,
   sets_lost INTEGER,
   sets_balance INTEGER,
+  games_won INTEGER,
+  games_lost INTEGER,
+  games_balance INTEGER,
   points_by_position INTEGER,
   extra_points INTEGER,
   total_points INTEGER,
   FOREIGN KEY (cycle_id) REFERENCES cycles(id), 
   FOREIGN KEY (player_id) REFERENCES players(id)
 );
+
+WITH csv_results AS (
+  SELECT csv.season_id,
+         cy.id AS cycle_id,
+         "group" AS group_number,
+         replace(Puesto, 'º', '') AS position,
+         "Grupo Destino" AS target_group,
+         pl.id AS player_id,
+         TRY_CAST(Puntos AS INTEGER) AS points,
+         Ganados AS matches_won, 
+         Perdidos AS matches_lost, 
+         "No Jugados" AS matches_not_played,
+         "Sets Ganados" AS sets_won, 
+         "Sets Perdidos" AS sets_lost, 
+         "Balance Sets" AS sets_balance,
+         "Juegos Ganados" AS games_won, 
+         "Juegos Perdidos" AS games_lost, 
+         "Balance Juegos" AS games_balance,
+         "Puntos por puesto" AS points_by_position, 
+         "Puntos extra" AS extra_points, 
+         "Puntos total" AS total_points
+  FROM read_csv('data-scraper/standings.csv', delim = ',', header = true) csv
+       INNER JOIN cycles cy ON csv.season_id = cy.season_id and csv.cycle_id = cy.cycle_order
+       INNER JOIN players pl ON csv.Jugador = pl.name
+)
+INSERT INTO cycle_standings(
+  cycle_id,
+  group_number,
+  position,
+  target_group,
+  player_id,
+  points,
+  matches_won,
+  matches_lost,
+  matches_not_played,
+  sets_won,
+  sets_lost,
+  sets_balance,
+  games_won,
+  games_lost,
+  games_balance,
+  points_by_position,
+  extra_points,
+  total_points
+) 
+SELECT cycle_id,
+       group_number,
+       position,
+       target_group,
+       player_id,
+       points,
+       matches_won,
+       matches_lost,
+       matches_not_played,
+       sets_won,
+       sets_lost,
+       sets_balance,
+       games_won,
+       games_lost,
+       games_balance,
+       points_by_position,
+       extra_points,
+       total_points
+FROM csv_results;
 
 CREATE SEQUENCE seq_club_id START 1;
 
