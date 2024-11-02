@@ -1,5 +1,6 @@
 import { Grid2 as Grid } from "@mui/material";
 import ReactECharts, { ReactEChartsProps } from "./ReactECharts";
+import { useIntl } from "react-intl";
 
 export interface ChartProps {
   data: any[];
@@ -8,13 +9,16 @@ export interface ChartProps {
 }
 
 export default function CycleChart({ data, xAxisColumn, yAxisColumn }: ChartProps) {
+  const intl = useIntl();
+
   const tooltipFormatter = (args: any) => {
     // let row = data[args.seriesId][args.dataIndex];
     let row = data[args[0].dataIndex];
-    return 'Season: ' + row.season + '<br />' + 
-           'Cycle: ' + row.cycle + '<br />' + 
-           'Group: ' + row.group + '<br />' + 
-           'Date: ' + row.date;
+    return intl.formatMessage({ id: "season" }) + ': ' + row.season + '<br />' + 
+           intl.formatMessage({ id: "cycle" }) + ': ' + row.cycle + '<br />' + 
+           intl.formatMessage({ id: "group" }) + ': ' + row.group + '<br />' + 
+           intl.formatMessage({ id: "position" }) + ': ' + row.position + '<br />' + 
+           intl.formatMessage({ id: "date" }) + ': ' + row.date;
   };
   const option: ReactEChartsProps["option"] = {
     title: {
@@ -49,6 +53,7 @@ export default function CycleChart({ data, xAxisColumn, yAxisColumn }: ChartProp
     grid: {
       left: "5%",
       right: "5%",
+      bottom: "10%",
     },
     series: [
       {
