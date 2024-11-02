@@ -227,6 +227,7 @@ export default function PlayerSummaryPanel({ playerName }: { playerName: string 
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
         <GridTitle size={6}>
+          {/* @ts-ignore */}
           <TitleTypography component="div" sx={{ height: '59px', alignContent: 'center' }} variant="caption"><FormattedMessage id="matchesRetired" /></TitleTypography>
         </GridTitle>
         <Grid size={6}>
