@@ -11,7 +11,7 @@ import CardContent from '@mui/material/CardContent';
 
 import { FormattedMessage, useIntl } from "react-intl";
 import PlayerSummaryPanel from "../components/PlayerSummaryPanel";
-import CycleChart from "../components/CycleChart";
+import CyclePanel from "../components/CyclePanel";
 
 const CardTitleTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -85,7 +85,7 @@ export default function Dashboard() {
                   <CardTitleTypography gutterBottom variant="h5">
                     <FormattedMessage id="cycles" />
                   </CardTitleTypography>
-                  <CycleChart playerName={selectedPlayer} />
+                  <CyclePanel playerName={selectedPlayer} />
                 </CardContent>
               </Card>
             </Grid>
