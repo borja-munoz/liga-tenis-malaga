@@ -1,8 +1,4 @@
-import { Box, CircularProgress, Typography, styled } from "@mui/material";
-
-const StyledTypography = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.main,
-}));
+import { Box } from "@mui/material";
 
 export default function LoadingMessage() {
   return (
