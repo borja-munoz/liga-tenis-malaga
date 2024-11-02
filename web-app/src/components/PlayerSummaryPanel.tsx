@@ -18,8 +18,12 @@ type PlayerSummary = {
   matchesRetired: number;
 };
 
-const TitleTypography = styled(Typography)(({ theme }) => ({
-  // color: theme.palette.primary.main,
+const GridTitle = styled(Grid)(() => ({
+  lineHeight: 0.2,
+  minWidth: '55px',
+}));
+
+const TitleTypography = styled(Typography)(() => ({
   color: "#555555",
 }));
 
@@ -134,97 +138,97 @@ export default function PlayerSummaryPanel({ playerName }: { playerName: string 
   return (
     <Grid container rowSpacing={3} columnSpacing={1}>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="matchesPlayed" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.matchesPlayed}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="matchesWon" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.matchesWon}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="matchesLost" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.matchesLost}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="setsWon" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.setsWon}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="setsLost" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.setsLost}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="setsBalance" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary && playerSummary.setsWon - playerSummary.setsLost}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="gamesWon" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.gamesWon}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="gamesLost" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.gamesLost}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="gamesBalance" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary && playerSummary.gamesWon - playerSummary.gamesLost}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="superTieBreaksWon" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.superTieBreaksWon}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="superTieBreaksLost" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.superTieBreaksLost}</ValueTypography>
         </Grid>
       </Grid>
       <Grid container size={4} direction="column" rowSpacing={1}>
-        <Grid size={6} sx={{ lineHeight: 0.2 }}>
+        <GridTitle size={6}>
           <TitleTypography variant="caption"><FormattedMessage id="matchesRetired" /></TitleTypography>
-        </Grid>
+        </GridTitle>
         <Grid size={6}>
           <ValueTypography variant="body1">{playerSummary?.matchesRetired}</ValueTypography>
         </Grid>
