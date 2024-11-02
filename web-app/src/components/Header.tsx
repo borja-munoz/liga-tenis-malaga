@@ -41,14 +41,14 @@ export default function Header() {
     <StyledAppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <FlareOutlinedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }} />
+          <FlareOutlinedIcon sx={{ display: { xs: 'flex', md: 'flex' }, mr: 2 }} />
           <Typography
             variant="h6"
             noWrap
             component="span"
             sx={{
               minWidth: '294px',
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'flex', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
