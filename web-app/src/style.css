@@ -1,0 +1,19 @@
+.zoom-in-out-box {
+  width: 100px;
+  height: 100px;
+  background: #f50057;
+  animation: zoom-in-zoom-out 1s ease infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes zoom-in-zoom-out {
+  0% {
+    scale: 100%
+  }
+  50% {
+    scale: 150%;
+  }
+  100% {
+    scale: 100%;
+  }
+}

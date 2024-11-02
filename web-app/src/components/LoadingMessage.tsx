@@ -15,8 +15,7 @@ export default function LoadingMessage() {
         minHeight: "100vh",
       }}
     >
-      <CircularProgress sx={{ marginBottom: "10px" }} />
-      <StyledTypography variant="h3">Loading database...</StyledTypography>
+      <div className="zoom-in-out-box"></div>
     </Box>
   );
 }
