@@ -37,59 +37,60 @@ export default function Dashboard() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            // alignItems: { xs: "center", md: "start" },
             padding: "20px",
           }}
         >
-          <Grid container direction="column" spacing={3}>
-            {playerData && (
-              <Grid container>
+          <Grid container sx={{ flexDirection: { xs: "column", sm: "row"} }} spacing={3}>
+            <Grid container size={{ xs: 12, sm:6, md: 4 }} >
                 {/* <Grid size={12}>
                   <span>
                     <FormattedMessage id="players" />: {playerData.length}
                   </span>
                 </Grid> */}
+              {playerData && (
                 <Grid size={12}>
                   <Autocomplete
                     value={selectedPlayer}
+                    //@ts-ignore
                     onChange={(event: any, newValue: string | null) => {
                       setSelectedPlayer(newValue);
                     }}
                     disablePortal
                     options={playerList}
-                    sx={{ width: 345 }}
+                    sx={{ minWidth: '225px', flexGrow: 1 }}
                     renderInput={(params) => (
                       <TextField {...params} 
                         label={intl.formatMessage({ id: "players" })} />
                     )}
                   />
                 </Grid>
+              )}
+              {selectedPlayer && (
+                <Grid container>
+                  <Card sx={{ flexGrow: 1}}>
+                    <CardContent>
+                      <CardTitleTypography gutterBottom variant="h5">
+                        <FormattedMessage id="playerSummary" />
+                      </CardTitleTypography>
+                      <PlayerSummaryPanel playerName={selectedPlayer} />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              )}
             </Grid>
-          )}
-          {selectedPlayer && (
-            <Grid container>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardContent>
-                  <CardTitleTypography gutterBottom variant="h5">
-                    <FormattedMessage id="playerSummary" />
-                  </CardTitleTypography>
-                  <PlayerSummaryPanel playerName={selectedPlayer} />
-                </CardContent>
-              </Card>
+            <Grid container size={{ xs: 12, sm: 6, md: 8 }} >
+              {selectedPlayer && (
+                <Card sx={{ flexGrow: 1}}>
+                  <CardContent>
+                    <CardTitleTypography gutterBottom variant="h5">
+                      <FormattedMessage id="cycles" />
+                    </CardTitleTypography>
+                    <CyclePanel playerName={selectedPlayer} />
+                  </CardContent>
+                </Card>
+              )}
             </Grid>
-          )}
-          {selectedPlayer && (
-            <Grid container>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardContent>
-                  <CardTitleTypography gutterBottom variant="h5">
-                    <FormattedMessage id="cycles" />
-                  </CardTitleTypography>
-                  <CyclePanel playerName={selectedPlayer} />
-                </CardContent>
-              </Card>
-            </Grid>
-          )}
           </Grid>
         </Box>
       </Grid>

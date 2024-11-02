@@ -46,6 +46,10 @@ export default function CycleChart({ data, xAxisColumn, yAxisColumn }: ChartProp
       },
       formatter: tooltipFormatter,
     },
+    grid: {
+      left: "5%",
+      right: "5%",
+    },
     series: [
       {
         data: data.map((row) => row[yAxisColumn]),
@@ -55,9 +59,15 @@ export default function CycleChart({ data, xAxisColumn, yAxisColumn }: ChartProp
   };
 
   return (
-    <Grid container mb={2} sx={{ border: "0px solid #EEEEEE", minHeight: "300px", minWidth: "315px" }}>
+    <Grid size={12} container 
+      sx={{ 
+        minHeight: { flexGrow: 1 },
+        minWidth: { flexGrow: 1 }, 
+      }}>
       <Grid size={12}>
-        <ReactECharts option={option} style={{ height: "300px" }} />
+        <ReactECharts 
+          option={option} 
+        />
       </Grid>
     </Grid>
   );

@@ -60,6 +60,13 @@ export default function ReactECharts({
   }, [loading, theme]);
 
   return (
-    <Box ref={chartRef} sx={{ width: "100%", height: "300px", ...style }} />
+    <Box 
+      ref={chartRef} 
+      sx={{ 
+        width: "100%", 
+        minHeight: { xs: "300px", sm: "400px" },
+        ...style 
+      }} 
+    />
   );
 }
