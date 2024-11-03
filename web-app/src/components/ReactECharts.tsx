@@ -64,7 +64,7 @@ export default function ReactECharts({
       ref={chartRef} 
       sx={{ 
         width: "100%", 
-        minHeight: { xs: "300px", sm: "400px" },
+        minHeight: { xs: "300px", sm: "350px" },
         ...style 
       }} 
     />
