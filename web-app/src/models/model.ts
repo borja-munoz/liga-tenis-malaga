@@ -31,12 +31,14 @@ export function usePlayerResults(playerName: string) {
            p1.name AS player_a, 
            p2.name AS player_b, 
            p3.name AS super_tie_break_winner, 
-           p4.name AS retired_player
+           p4.name AS retired_player,
+           cl.name AS club
     FROM results r
          LEFT OUTER JOIN players p1 ON r.player_a_id = p1.id
          LEFT OUTER JOIN players p2 ON r.player_b_id = p2.id
          LEFT OUTER JOIN players p3 ON r.super_tie_break_winner_id = p3.id
          LEFT OUTER JOIN players p4 ON r.retired_player_id = p4.id
+         LEFT OUTER JOIN clubs cl ON r.club_id = cl.id
     WHERE p1.name = '${playerName}' OR
           p2.name = '${playerName}' 
     ORDER BY r.season_id, r.cycle_order
