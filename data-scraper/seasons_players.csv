@@ -1,0 +1,769 @@
+season_id,player_name
+1,Adrián Mariscal
+1,Alberto Llorens
+1,Alberto Rivera
+1,Alejandro García
+1,Alejandro Gómez
+1,Ana Alarcón
+1,Antonio Gruszczynski
+1,Antonio Pesare
+1,Axel Lopez
+1,Baldo
+1,Cristóbal Gómez
+1,Eduardo León
+1,Eric Gaultier
+1,Federica Pesare
+1,Fernando Sansegundo/ Adrián Mariscal
+1,Gian Ungarelli
+1,Ignacio Alonso
+1,Iker Gorostegui
+1,Javier Morales
+1,Jeremy Pérez
+1,Jorge Martin
+1,Juan Alarcón
+1,Juan Expósito
+1,Juan Vilches
+1,Kari Kinnunen
+1,Leandro
+1,Leandro 
+1,Leo Ramos
+1,Manu
+1,Mary Pesare
+1,Matías Suarez
+1,Matías Suárez
+1,Miguel Angel Ramos
+1,Nikke Petrola
+1,Peter Sour
+1,Pilar Pires
+1,Rafael Castillejo
+1,Rafael Navas
+1,Raul Lorente
+1,Ruben Jiménez
+1,Rubén Jiménez
+1,Sergio González
+1,Tote Sansegundo
+1,Vidal
+1,Álvaro Lara/ Federico Bernard
+2,Adrián Gómez
+2,Adrián Merchán
+2,Alberto Cerezo
+2,Alberto Llorens
+2,Alberto Rivera
+2,Alejandro García
+2,Alejandro Gómez
+2,Alejandro Parra
+2,Ana Alarcón
+2,Andrés García
+2,Daniel Albiac
+2,Eduardo Domínguez
+2,Eduardo León
+2,Eemil Raty
+2,Egidio Ferrari
+2,Eric Gaultier
+2,Fran Trujillo
+2,Francisco García
+2,Gunnar Kaup
+2,Ignacio Alonso
+2,Iker Gorostegui
+2,Javier Morales
+2,Jeremy Pérez
+2,Jim Fabricius
+2,Jose Ugart
+2,Josemi Ortiz
+2,Juan Alarcón
+2,Juan Olmo
+2,Juan Vilches
+2,Kari Kinnunen
+2,Kiko Villalón
+2,Leo Ramos
+2,Manu
+2,Manuel Chaneta
+2,Matías Suárez
+2,Miguel Acevedo
+2,Miguel Angel Ramos
+2,Miguel Martín
+2,Oliver Ollin
+2,Patrick
+2,Pilar Pires
+2,Rafael Navas
+2,Raúl Lorente
+2,Sergio González
+2,Tomas Mazowski
+2,Tote Sansegundo
+2,Vidal
+3,Adrián Gómez
+3,Alberto Cerezo
+3,Alberto Llorens
+3,Alberto Rivera
+3,Alberto Álvarez
+3,Alejandro Gallardo
+3,Alejandro García
+3,Alejandro Gómez
+3,Alessandro Giannini
+3,Alfonso García
+3,Ana Alarcón
+3,Andrés García
+3,Antonino Aragona
+3,Antonio Flores
+3,Antonio González
+3,Antonio Quirós
+3,Daniel Albiac
+3,Diego Preuss
+3,Eduardo León
+3,Eemil Raty
+3,Enrique Portales
+3,Eric Gaultier
+3,Fran Trujillo
+3,Francisco Garcia
+3,Francisco García
+3,Guillermo Rojo
+3,Gunnar Kaup
+3,Ignacio Alonso
+3,Iker Gorostegui
+3,Ildefonso Delgado
+3,Jano
+3,Javier Morales
+3,Jesús Ramírez
+3,Joaquin Almagro
+3,Jorge Martín
+3,Jose Carlos Torres
+3,Jose Ugart
+3,Josemi Ortiz
+3,José Sánchez Nieto
+3,Juan Alarcón
+3,Juan Expósito
+3,Juan Olmo
+3,Juan Vilches
+3,Kari Kinnunen
+3,Kike Paulete
+3,Kiko Villalón
+3,Leo Ramos
+3,Lora Veselinova
+3,Manu Solla
+3,Manuel Chaneta
+3,Miguel Acevedo
+3,Miguel Martín
+3,Miguel Ángel Ramos
+3,Navin Sangtani
+3,Nicolás Van Cauwenberghe
+3,Oliver Ollin
+3,Pilar Pires
+3,Rafael Navas
+3,Raúl Lorente
+3,Robert Madre
+3,Rodrigo Navarro
+3,Sebastián Alicante
+3,Sebastián Prieto
+3,Sergio González
+3,Tomas Mazowski
+3,Vidal
+4,Adolfo Mora
+4,Adrián Gómez Cuevas
+4,Alberto Llorens
+4,Alberto Rivera
+4,Alberto Vazquez
+4,Alberto Álvarez
+4,Alberto Álvarez XX
+4,Alejandro Gallardo
+4,Alejandro García
+4,Alejandro Gómez
+4,Alejandro Parra
+4,Alejandro Salmerón
+4,Alessandro Giannini
+4,Alex Petrov
+4,Alfonso García
+4,Alvaro Artacho
+4,Alvaro Lara
+4,Ana Alarcón
+4,Andrés Garcia
+4,Antonino Aragona
+4,Antonio Calderón
+4,Antonio González
+4,Antonio González Font
+4,Antonio Ramírez
+4,Borja Montenegro
+4,Carlos García
+4,Carlos Gregorio
+4,Daniel Albiac
+4,Daniel Flores
+4,Diego Martín
+4,Enrique Alviz
+4,Erik García
+4,Esteban Benitez
+4,Fran Trujillo
+4,Francisco Garcia
+4,Francisco Javier Luna
+4,Gunnar Kaup
+4,Guy Winter
+4,Ignacio Alonso
+4,Iker Gorostegui
+4,Ildefonso Delgado
+4,Jano
+4,Javier López
+4,Javier Morales
+4,Jeremy Pérez
+4,Jesus Vázquez
+4,Jesús Manuel Calvente
+4,Jesús Ramírez
+4,Jim Fabricius
+4,Joaquin Almagro
+4,Jorge Cano
+4,Jorge Gálvez
+4,Jorge Martín
+4,Jorge Martínez
+4,Jose Cano
+4,Jose Carlos Torres
+4,Jose Lima
+4,Jose Nuñez
+4,Jose Ugart
+4,Josemi
+4,Josemi Ortiz
+4,José Manuel Gajate
+4,José Sánchez Nieto
+4,Juan Alarcón
+4,Juan Andrés Muñoz
+4,Juan Expósito
+4,Juan Olmo
+4,Juan Vilches
+4,Juanma Gutierrez
+4,Kari Kinnunen
+4,Kike Paulete
+4,Kiko Villalón
+4,Leo Ramos
+4,Lora Veselinova
+4,Luis Gil-Delgado
+4,Manu Solla
+4,Manuel Chaneta 
+4,Manuel de la Coba
+4,Miguel Acevedo
+4,Miguel Díaz
+4,Miguel Martín
+4,Miguel Ángel Moreno
+4,Miguel Ángel Ramos
+4,Miguel Ángel Rodriguez
+4,Mikael Johansson
+4,Navin Sangtani
+4,Nicolás Van Cauwenberghe
+4,Noel
+4,Oliver Ollin
+4,Pablo Garcia
+4,Pablo Morales
+4,Patrick
+4,Pedro Javier Rodríguez
+4,Pedro Javier Rodríguez XX
+4,Pedro Podadera
+4,Rafael Navas
+4,Raúl Lorente
+4,Renato
+4,Robert Madre
+4,Rustam Abduraufov
+4,Samuel Bautista
+4,Sebastián Prieto
+4,Sergio González
+4,Tarek
+4,Tomas Mazowski
+4,Vidal Claramonte
+4,Ádel Kháder
+4,Álvaro Sánchez
+5,Adil Slamti
+5,Adolfo Mora
+5,Adriano Petrizzo
+5,Adrián Gómez Cuevas
+5,Alberto Llorens
+5,Alberto Riquelme
+5,Alberto Rivera
+5,Alberto Vazquez
+5,Alejandro Gallardo
+5,Alejandro García
+5,Alejandro Parra
+5,Alessandro Giannini
+5,Alexandru Palade
+5,Alvaro Cruz
+5,Andrés Garcia
+5,Antonino Aragona
+5,Antonio Calderón
+5,Antonio González
+5,Antonio Ramírez Medina
+5,Antonio Villegas
+5,Armaan Sadhwani
+5,Beatriz Aguera
+5,Borja Jara
+5,Borja Muñoz
+5,Carlos Fernandez de la Puente
+5,Carlos García
+5,Clement Ballion
+5,Daniel Albiac
+5,Daniel Fernández
+5,David Ocaña
+5,David Plaza
+5,Diego Martín
+5,Eloy Martín
+5,Esteban Benitez
+5,Felix Pettersson
+5,Filippo Gioiello
+5,Francisco Javier Luna
+5,Gerardo Esteban Tascon
+5,Gian Ungarelli
+5,Guillermo Martín
+5,Gunnar Kaup
+5,Gustavo Garcí
+5,Henry Krause
+5,Ignacio Alonso
+5,Ignacio Batallán
+5,Iker Gorostegui
+5,Ildefonso Delgado
+5,Jano
+5,Javier López
+5,Javier Morales
+5,Javier Nieto
+5,Jeremy Pérez
+5,Jesus Ramírez
+5,Jesús Ramírez
+5,Jesús Vazquez
+5,Joaquin Almagro
+5,Jonas Jones
+5,Jorge Cano
+5,Jorge Gálvez
+5,Jorge Martín
+5,Jorge Taillefer
+5,Jose Cano
+5,Jose Carlos Torres
+5,Jose Manuel Gajate
+5,Jose Ugart
+5,José Sánchez Nieto
+5,Juan Alarcón
+5,Juan Andrés Muñoz
+5,Juan Olmo
+5,Juan Vilches
+5,Juanma Gutierrez
+5,Kari Kinnunen
+5,Kiko Villalón
+5,Leo Ramos
+5,Lora Veselinova
+5,Luis Gil-Delgado
+5,Manu Solla
+5,Manuel Chaneta 
+5,Mark Webster
+5,Martín Mantegini
+5,Max Pettersson
+5,Miguel Acevedo
+5,Miguel Erik
+5,Miguel Ángel Moreno
+5,Miguel Ángel Ramos
+5,Mikael Johansson
+5,Nacho Moreno
+5,Nicolás Multisanti
+5,Niilo Relander
+5,Olga Dorokhina
+5,Oliver Ollin
+5,Pablo Garcia
+5,Pablo Morales
+5,Patrick
+5,Pedro Javier Rodríguez
+5,Pedro Podadera
+5,Pier Thiercelin
+5,Rafael Navas
+5,Raúl Lorente
+5,Renato
+5,Robert Madre
+5,Roberto Sanchez Saavedra
+5,Rodrigo Navarro
+5,Rustam Abduraufov
+5,Salvador Ruiz
+5,Sebastián Prieto
+5,Sergio González
+6,Adrián Gómez Cuevas
+6,Alain Miguel Postigo
+6,Alberto Cerezo
+6,Alberto Rivera
+6,Alberto Vazquez
+6,Alberto Álvarez
+6,Alejandro Garcia
+6,Alejandro García
+6,Alejandro Parra
+6,Alessandro Giannini
+6,Alice Kjestine Valintin
+6,Alvaro Carvajal Tajuelo
+6,Alvaro Fernández Molina
+6,Alvaro Santos
+6,Ana Alarcón
+6,Andrés Garcia
+6,Antonio Calderón
+6,Antonio Flores
+6,Antonio González
+6,Antonio Peláez Aguilera
+6,Antonio Ramírez Medina
+6,Beatriz Aguera
+6,Borja Jara
+6,Borja Muñoz
+6,Borja Rosales
+6,Carlos Fernandez de la Puente
+6,Carlos Ortiz
+6,Carlos Pérez Merino
+6,Cesar Henry Sotomayor
+6,Cristobal Gómez
+6,Daniel Albiac
+6,Daniel Fernández
+6,David Benítez
+6,David Blanco
+6,David Ocaña
+6,David Plaza
+6,Diego Martín
+6,Dumitru Bucse
+6,Eduardo Ariza Tello
+6,Eduardo de Teresa
+6,Eian Kantor
+6,Eloy Diaz
+6,Enrique Monereo López
+6,Esteban Benitez
+6,Filippo Gioiello
+6,Germán Raúl Cebrián
+6,Gunnar Kaup
+6,Gustavo García
+6,Gustavo Luzuriaga
+6,Hans Alexander Döhne
+6,Ignacio Alonso
+6,Ignacio Batallán
+6,Ignacio Calvo Iglesias
+6,Ildefonso Delgado
+6,Jaime Govantes
+6,Javier Ariño García
+6,Javier López
+6,Javier Morales
+6,Javier Nieto
+6,Javier Silva Silva
+6,Javier Urbieta Arias
+6,Javier del Pino Romero
+6,Jeremy Pérez
+6,Jerónimo Varela
+6,Jesús Vazquez
+6,Joaquin Almagro
+6,Jonas Jones
+6,Jorge Gálvez
+6,Jorge Martín
+6,Jose Segura Guerrero
+6,Jose Ugart
+6,Josemi Ortiz
+6,José Andrés Rivero
+6,José Miguel Ranea
+6,José Ramón Rubia
+6,José Sánchez Nieto
+6,Juan Alarcón
+6,Juan Andrés Muñoz
+6,Juan Miguel Chaves
+6,Juan Olmo
+6,Juan Soto Rosa
+6,Juan Vilches
+6,Juanma Gutierrez
+6,Kunal Daryanani
+6,Leo Ramos
+6,Lora Veselinova
+6,Luis Gil-Delgado
+6,Luis Rivas Castro
+6,Manu Solla
+6,Mark Webster
+6,Maximilian Pohl
+6,Miguel Acevedo
+6,Miguel Erik
+6,Miguel Ángel Moreno
+6,Miguel Ángel Ramos
+6,Mikael Johansson
+6,Nacho Martínez Trinidad
+6,Nicolás Multisanti
+6,Nioi Roberto
+6,Oliver Ollin
+6,Pablo Morales
+6,Pablo Piazuelo
+6,Patrick
+6,Pedro Javier Rodríguez
+6,Pedro Podadera
+6,Rafael Artalejo
+6,Rafael Navas
+6,Raymond van den Elsen
+6,Raúl Lorente
+6,Renato
+6,Ricardo Toma Freitag
+6,Robert Madre
+6,Rodolfo Puebla
+6,Rune Omdal
+6,Salvador González Novoa
+6,Salvador Ruiz
+6,Sebastián Prieto
+6,Sergio González
+6,Siim Prits
+6,Stefano Pezza
+6,Vicente García Urbano
+6,Álvaro Corpas
+7,Adrián Gómez Cuevas
+7,Adrián Mariscal
+7,Alberto Cerezo
+7,Alberto Rivera
+7,Alberto Triviño
+7,Alberto Álvarez
+7,Alejandro Caccialanza
+7,Alejandro Gallardo Moreno
+7,Alejandro Gómez
+7,Alejandro Parra
+7,Alessandro Giannini
+7,Alexey Metalnikov
+7,Alfredo Pérez Piaya 
+7,Alvaro Corpas
+7,Amit Kumar
+7,Andrés Garcia
+7,Antonio Calderón
+7,Antonio Flores
+7,Antonio Mora-Figueroa
+7,Antonio Peláez Aguilera
+7,Antonio Ramírez Medina
+7,Antonio Villegas
+7,Borja Muñoz
+7,Borja Rosales
+7,Carlos Ortiz
+7,Carlos Pérez Merino
+7,Cayetano Manilla
+7,Cesar Henry Sotomayor
+7,Christian Bier
+7,Cosmin Holbia
+7,Critobal García Martín
+7,Curro Ramos Olmedo
+7,Daniel Fernández
+7,Daniel Fernández Tamayo
+7,Daniel Jimenez Rodriguez
+7,David Andrés Pérez
+7,David Blanco
+7,David Ocaña
+7,David Podonowski
+7,David de Prado Rodríguez
+7,Dennis Kranendonk
+7,Diego Martín
+7,Eduardo Ariza Tello
+7,Eduardo de Teresa
+7,Eloy Diaz
+7,Eloy Martín
+7,Enrique Monereo López
+7,Esteban Benitez
+7,Fernando Arias Barrón
+7,Filippo Gioiello
+7,Francisco Gemas Sanchez
+7,Francisco Ramos Ruiz
+7,Francisco de Paula García
+7,Germán Raúl Cebrián
+7,Gian Ungarelli
+7,Gregorio Alonso
+7,Guillermo Martín Carro
+7,Gunnar Kaup
+7,Guy Wynter
+7,Hans Alexander Döhne
+7,Ignacio Moreno Dávila
+7,Ignacio Prada Gorgé
+7,Iker Gorostegui
+7,Ildefonso Delgado
+7,Ionut Crisan
+7,Jaime Govantes
+7,Jani Marjamaa
+7,Javier Ariño García
+7,Javier López
+7,Javier Morales
+7,Javier Silva Silva
+7,Javier Urbieta Arias
+7,Javier del Pino Romero
+7,Jeremy Pérez
+7,Jerónimo Varela
+7,Jesus Ramírez
+7,Jesús Domínguez Guerrero
+7,Jim Fabricius
+7,Joaquin Almagro
+7,Jonas Jones
+7,Jorge Cejudo Sempere
+7,Jorge Gálvez
+7,Jorge Martín
+7,Jorge Wolek
+7,Jose Alberto Llorens Palau
+7,Jose Castro Rojas
+7,Jose Manuel Gajate
+7,Jose María Cantero
+7,Jose Segura Guerrero
+7,Jose Ugart
+7,Josemi Ortiz
+7,José Andrés Garcia-Alonso
+7,José Andrés Rivero
+7,José Ignacio Medina Spiteri
+7,José Madrid Márquez
+7,José María del Pino
+7,José Miguel Ranea
+7,José Rodriguez Vega
+7,José Sánchez Nieto
+7,Juan Alarcón
+7,Juan Andrés Muñoz
+7,Juan Antonio Tabernero
+7,Juan Bautista
+7,Juan Bautista García Collado
+7,Juan Bazán Rojas
+7,Juan Luis Rodriguez
+7,Juan Sanchez Dorado
+7,Juan Vilches
+7,Jussi Toivanen
+7,Leandro Nicolini
+7,Leo Ramos
+7,Lora Veselinova
+7,Luis Gil-Delgado
+7,Luis Mesa Garcia
+7,Manu Solla
+7,Manuel Santos de la Coba
+7,Marco Perrullo
+7,Mark Webster
+7,Miguel Acevedo
+7,Miguel Angel Vargas Campaña
+7,Miguel Martín Pérez
+7,Miguel Ángel Ramos
+7,Navin Sangtani
+7,Nestor Baroni
+7,Nicolás Imperiale
+7,Nicolás Multisanti
+7,Oliver Ollin
+7,Oscar Pacheco Crincoli
+7,Pablo Nicolas Lemolo
+7,Pablo Piazuelo
+7,Pedro Javier Rodríguez
+7,Pedro Merino Merida
+7,Pedro Parada Avendaño
+7,Pedro Podadera
+7,Rafael Navas
+7,Ram Lakhwani
+7,Renato García
+7,Ricardo Ramos Ruiz
+7,Ricardo Toma Freitag
+7,Robert Madre
+7,Roberto Gomar Monio
+7,Roberto Nioi
+7,Rustam Abduraufov 
+7,Salvador González Novoa
+7,Salvador Ruiz Vera
+7,Santiago Ventoso Faccio
+7,Santiago del Rio
+7,Sebastián Prieto
+7,Sergio González
+7,Stefano  Brunetti
+7,Vicente García Urbano
+7,Yoel Estudillo
+7,Álvaro Serrano
+8,Adrián Gomez
+8,Adrián Jaime
+8,Adrián Mariscal
+8,Adrián Muñoz
+8,Alberto Cerezo
+8,Alberto Ramírez
+8,Alberto Rivera
+8,Alberto Álvarez
+8,Alejandro Gallardo
+8,Alejandro Garcia
+8,Alejandro Hernández
+8,Alejandro Padilla
+8,Alejandro Parra
+8,Alessandro Giannin
+8,Alessandro Giannini
+8,Andrés García
+8,Antonio Baena
+8,Antonio Berrocal
+8,Antonio Flores
+8,Borja Muñoz
+8,Borja Rosales
+8,Carlos Ortiz
+8,Cesar Sotomayor
+8,Clement Ballion
+8,Cosmin Holbia
+8,Damian Parras
+8,Daniel F. Tamayo
+8,Daniel F. Urrestarazu
+8,Daniel Jimenez
+8,David Andrade
+8,David de Prado
+8,Dennis Kranendonk
+8,Eduardo de Teresa
+8,Eloy Martín
+8,Enrique Monereo
+8,Esteban Benítez
+8,Fernando Anés
+8,Fernando Arias
+8,Fran Ramos
+8,Francisco G. Santos
+8,Francisco L. García
+8,Francisco Sanchez
+8,Francisco Torres
+8,Gastón Carbonelli
+8,Germán Pacheco
+8,Gian Ungarelli
+8,Gregorio Alonso
+8,Gunnar Kaup
+8,Ildefonso Delgado
+8,Ionut Crisan
+8,Jaime Crespi
+8,Jaime Govantes
+8,Javier Ariño
+8,Javier Lopez
+8,Javier Silva
+8,Javier Urbieta
+8,Jim Fabricius
+8,Joaquín Almagro
+8,Jonas Jones
+8,Jorge Gálvez
+8,Jorge Wolek
+8,Jose Cantero
+8,Jose Ignacio Medina
+8,Jose Madrid
+8,Jose Manuel Castro
+8,Jose Sanchez Nieto
+8,Jose Segura
+8,Josemi Ortiz
+8,José Manuel Gajate
+8,Juan A. Tabernero
+8,Juan Alarcón
+8,Kevin Moro
+8,Leo Ramos
+8,Linus Ze
+8,Lora Veselinova
+8,Loren Arambula
+8,Lou Abado
+8,Luis Gil-Delgado
+8,Luis Mesa
+8,Manolo Roca
+8,Manu Solla
+8,Manuel Mateos
+8,Manuel de la Coba
+8,Marco Musso
+8,Mark Webster
+8,Miguel Acevedo
+8,Miguel Erik
+8,Miguel Ángel Vargas
+8,Nacho Yañez
+8,Navin Sangtani
+8,Neil Young
+8,Nick Becket
+8,Nicolás Lemolo
+8,Oleksandr Pazynych
+8,Oscar Pacheco
+8,Pascal Maeder
+8,Pedro Parada
+8,Pedro Podadera
+8,Rafael Navas
+8,Ram Lakhwani
+8,Raul Lorente
+8,Renato García
+8,Ricardo Ramos/Alejandro Padilla
+8,Ricardo Toma
+8,Robert Madre
+8,Roland Beijer
+8,Ruben Yanes
+8,Rustam Abduraufov
+8,Salvador González
+8,Salvador Ruiz
+8,Santiago Ventoso
+8,Santiago del Rio
+8,Sebastián Prieto
+8,Sebastián Roca
+8,Sophia Adil
+8,Vicente Roca
+8,Álvaro Corpas
+8,Álvaro Santos
+8,Álvaro Serrano
+8,Ángel Poyato
