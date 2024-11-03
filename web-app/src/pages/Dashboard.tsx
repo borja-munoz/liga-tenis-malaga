@@ -12,6 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import { FormattedMessage, useIntl } from "react-intl";
 import PlayerSummaryPanel from "../components/PlayerSummaryPanel";
 import CyclePanel from "../components/CyclePanel";
+import ResultsPanel from "../components/ResultsPanel";
 
 const CardTitleTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -68,7 +69,7 @@ export default function Dashboard() {
               )}
               {selectedPlayer && (
                 <Grid container>
-                  <Card sx={{ flexGrow: 1}}>
+                  <Card sx={{ flexGrow: 1 }}>
                     <CardContent>
                       <CardTitleTypography gutterBottom variant="h5">
                         <FormattedMessage id="playerSummary" />
@@ -81,12 +82,24 @@ export default function Dashboard() {
             </Grid>
             <Grid container size={{ xs: 12, sm: 6, md: 8 }} >
               {selectedPlayer && (
-                <Card sx={{ flexGrow: 1}}>
+                <Card sx={{ flexGrow: 1 }}>
                   <CardContent>
                     <CardTitleTypography gutterBottom variant="h5">
                       <FormattedMessage id="cycles" />
                     </CardTitleTypography>
                     <CyclePanel playerName={selectedPlayer} />
+                  </CardContent>
+                </Card>
+              )}
+            </Grid>
+            <Grid container size={12} >
+              {selectedPlayer && (
+                <Card sx={{ flexGrow: 1 }}>
+                  <CardContent>
+                    <CardTitleTypography gutterBottom variant="h5">
+                      <FormattedMessage id="results" />
+                    </CardTitleTypography>
+                    <ResultsPanel playerName={selectedPlayer} />
                   </CardContent>
                 </Card>
               )}

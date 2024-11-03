@@ -41,6 +41,10 @@ export const messages = {
     group: "Group",
     position: "Position",
     date: "Date",
+
+    // Results
+    results: "Results",
+    retired: "Retired",
   },
 
   [LOCALES.SPANISH]: {
@@ -82,6 +86,10 @@ export const messages = {
     group: "Grupo",
     position: "Posición",
     date: "Fecha",
+
+    // Results
+    results: "Resultados",
+    retired: "Retirado",
   },
 
 };
