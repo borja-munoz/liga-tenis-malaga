@@ -53,6 +53,7 @@ export default function PlayerSummaryPanel({ playerName }: { playerName: string 
     let matchesRetired = 0;
     matches.forEach((match) => {
       let matchWon = false;
+      let playerRetired = false;
       // Retired player
       if (match.retired_player) {
         if (match.retired_player != playerName) {
@@ -60,6 +61,7 @@ export default function PlayerSummaryPanel({ playerName }: { playerName: string 
         }
         else {
           matchesRetired += 1;
+          playerRetired = true;
         }
       }
       // Super tie break
@@ -99,7 +101,7 @@ export default function PlayerSummaryPanel({ playerName }: { playerName: string 
       if (match.player_a == playerName) {
         setsWon += setsWonPlayerA;
         setsLost += setsWonPlayerB;
-        if (setsWonPlayerA == 2) {
+        if (setsWonPlayerA == 2 && !playerRetired) {
           matchWon = true;
         }
         gamesWon += gamesWonPlayerA;
@@ -108,7 +110,7 @@ export default function PlayerSummaryPanel({ playerName }: { playerName: string 
       else {
         setsWon += setsWonPlayerB;
         setsLost += setsWonPlayerA;
-        if (setsWonPlayerB == 2) {
+        if (setsWonPlayerB == 2 && !playerRetired) {
           matchWon = true;
         }
         gamesWon += gamesWonPlayerB;
