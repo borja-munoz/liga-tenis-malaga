@@ -31,6 +31,24 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
     fontWeightOpponent = 'bold';
   }
 
+  // Bold font weight for set winner
+  let fontWeightPlayerSetOne = 'regular';
+  let fontWeightPlayerSetTwo = 'regular';
+  let fontWeightOpponentSetOne = 'regular';
+  let fontWeightOpponentSetTwo = 'regular';
+  if (result.gamesWonSetOne > result.gamesLostSetOne) {
+    fontWeightPlayerSetOne = 'bold';
+  }
+  else {
+    fontWeightOpponentSetOne = 'bold';
+  }
+  if (result.gamesWonSetTwo > result.gamesLostSetTwo) {
+    fontWeightPlayerSetTwo = 'bold';
+  }
+  else {
+    fontWeightOpponentSetTwo = 'bold';
+  }
+
   return (
     <Grid container rowSpacing={1} columnSpacing={1}>
       <Grid size={6}>
@@ -47,8 +65,8 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
         </TitleTypography>
       </GridTitle>
       <GridTitle size={6} sx={{ textAlign: 'end' }}>
-        <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightPlayer }}>{result.gamesWonSetOne}</ValueTypography>
-        <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayer }}>{result.gamesWonSetTwo}</ValueTypography>
+        <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightPlayerSetOne }}>{result.gamesWonSetOne}</ValueTypography>
+        <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayerSetTwo }}>{result.gamesWonSetTwo}</ValueTypography>
         {result.superTieBreakWinner != '' && (
           <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayer }}>
             {result.superTieBreakWinner == playerName ? 1 : 0}
@@ -63,8 +81,8 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
         </TitleTypography>
       </GridTitle>
       <GridTitle size={6} sx={{ textAlign: 'end' }}>
-        <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightOpponent }}>{result.gamesLostSetOne}</ValueTypography>
-        <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px",  fontWeight: fontWeightOpponent }}>{result.gamesLostSetTwo}</ValueTypography>
+        <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightOpponentSetOne }}>{result.gamesLostSetOne}</ValueTypography>
+        <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px",  fontWeight: fontWeightOpponentSetTwo }}>{result.gamesLostSetTwo}</ValueTypography>
         {result.superTieBreakWinner != '' && (
           <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightOpponent }}>
             {result.superTieBreakWinner == playerName ? 0 : 1}
