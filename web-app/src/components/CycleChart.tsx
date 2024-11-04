@@ -22,7 +22,7 @@ export default function CycleChart({ data, xAxisColumn, yAxisColumn }: ChartProp
   };
   const option: ReactEChartsProps["option"] = {
     title: {
-      text: "Group",
+      text: intl.formatMessage({ id: "group" }),
       padding: [
         10,  // up
         0, // right
