@@ -195,7 +195,7 @@ for template in template_seasons:
           if len(fe.text.split()) >= 3:
             # Check if we have a super tie break
             if '-' in fe.text.split()[2]:
-              if fe.text.split()[2].split('-')[0] == 1:
+              if fe.text.split()[2].split('-')[0] == '1':
                 super_tie_break_winner = player_a
               else:
                 super_tie_break_winner = player_b
@@ -255,55 +255,58 @@ with open('seasons_players.csv', 'w', newline='') as csvfile:
         if len(player) > 2:
           spamwriter.writerow([season_index, player])
 
-with open('standings.csv', 'w', newline='') as csvfile:
-    spamwriter = csv.writer(csvfile, delimiter=',')
-    spamwriter.writerow([
-      'season_id', 
-      'cycle_id',
-      'group',
-      'Puesto',
-      'Grupo Destino',
-      'Jugador',
-      'Puntos',
-      'Ganados',
-      'Perdidos',
-      'No Jugados',
-      'Sets Ganados',
-      'Sets Perdidos',
-      'Balance Sets',
-      'Juegos Ganados',
-      'Juegos Perdidos',
-      'Balance Juegos',
-      'Puntos por puesto',
-      'Puntos extra',
-      'Puntos total'
-    ])
-    for season_index in range(1, 9):
-      for cycle_index in range(0, len(cycle_data[season_index - 1])):
-          for group_index in range(0, len(cycle_data[season_index - 1][cycle_index])):
-            for player_index in range(0, len(cycle_data[season_index - 1][cycle_index][group_index])):
-              player_data = cycle_data[season_index - 1][cycle_index][group_index][player_index]
-              spamwriter.writerow([
-                season_index, 
-                cycle_index + 1,
-                group_index + 1,
-                player_data['Puesto'],
-                player_data.get('Grupo Destino') or '',
-                player_data['Jugador'],
-                player_data['Puntos'],
-                player_data['Ganados'],
-                player_data['Perdidos'],
-                player_data['No Jugados'],
-                player_data['Sets Ganados'],
-                player_data['Sets Perdidos'],
-                player_data['Balance Sets'],
-                player_data.get('Juegos Ganados') or '',
-                player_data.get('Juegos Perdidos') or '',
-                player_data.get('Balance Juegos') or '',
-                player_data['Puntos por puesto'],
-                player_data['Puntos extra'],
-                player_data['Puntos total']
-              ])
+# Avoid writing the standings file because it requires manual 
+# editing to account for errors in the web page text and 
+# the parser
+# with open('standings.csv', 'w', newline='') as csvfile:
+#     spamwriter = csv.writer(csvfile, delimiter=',')
+#     spamwriter.writerow([
+#       'season_id', 
+#       'cycle_id',
+#       'group',
+#       'Puesto',
+#       'Grupo Destino',
+#       'Jugador',
+#       'Puntos',
+#       'Ganados',
+#       'Perdidos',
+#       'No Jugados',
+#       'Sets Ganados',
+#       'Sets Perdidos',
+#       'Balance Sets',
+#       'Juegos Ganados',
+#       'Juegos Perdidos',
+#       'Balance Juegos',
+#       'Puntos por puesto',
+#       'Puntos extra',
+#       'Puntos total'
+#     ])
+#     for season_index in range(1, 9):
+#       for cycle_index in range(0, len(cycle_data[season_index - 1])):
+#           for group_index in range(0, len(cycle_data[season_index - 1][cycle_index])):
+#             for player_index in range(0, len(cycle_data[season_index - 1][cycle_index][group_index])):
+#               player_data = cycle_data[season_index - 1][cycle_index][group_index][player_index]
+#               spamwriter.writerow([
+#                 season_index, 
+#                 cycle_index + 1,
+#                 group_index + 1,
+#                 player_data['Puesto'],
+#                 player_data.get('Grupo Destino') or '',
+#                 player_data['Jugador'],
+#                 player_data['Puntos'],
+#                 player_data['Ganados'],
+#                 player_data['Perdidos'],
+#                 player_data['No Jugados'],
+#                 player_data['Sets Ganados'],
+#                 player_data['Sets Perdidos'],
+#                 player_data['Balance Sets'],
+#                 player_data.get('Juegos Ganados') or '',
+#                 player_data.get('Juegos Perdidos') or '',
+#                 player_data.get('Balance Juegos') or '',
+#                 player_data['Puntos por puesto'],
+#                 player_data['Puntos extra'],
+#                 player_data['Puntos total']
+#               ])
 
 with open('results.csv', 'w', newline='') as csvfile:
     fieldnames = [
@@ -325,5 +328,5 @@ with open('results.csv', 'w', newline='') as csvfile:
     for result in results:
       writer.writerow(result)
 
-print('Data Extracted...')
-print(f'Players: {len(players)}')
+print('Data Extracted')
+# print(f'Players: {len(players)}')
