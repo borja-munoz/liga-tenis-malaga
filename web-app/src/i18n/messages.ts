@@ -31,8 +31,9 @@ export const messages = {
     matchesRetired: "Matches Retired",
 
     // Cycles
-    seasons: "Seasons",
     cycles: "Cycles",
+    seasonsPlayed: "Seasons Played",
+    cyclesPlayed: "Cycles Played",
     bestGroup: "Best Group",
     bestPosition: "Best Position",
     totalPoints: "Total Points",
@@ -76,8 +77,9 @@ export const messages = {
     matchesRetired: "Partidos Retirados",
 
     // Cycles
-    seasons: "Temporadas",
     cycles: "Ciclos",
+    seasonsPlayed: "Temporadas Jugadas",
+    cyclesPlayed: "Ciclos Jugados",
     bestGroup: "Mejor Grupo",
     bestPosition: "Mejor Posición",
     totalPoints: "Puntos Totales",

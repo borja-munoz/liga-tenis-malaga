@@ -98,10 +98,10 @@ export default function CyclePanel({ playerName }: { playerName: string }) {
               yAxisColumn="group"
             />
           </Grid>
-          <Grid container size={12} direction="row" >
+          <Grid container size={12} direction="row" sx={{ paddingLeft: '10px' }} >
             <Grid container size={{ sm: 4, md: 2}} direction="column" rowSpacing={1}>
               <GridTitle size={6}>
-                <TitleTypography variant="caption"><FormattedMessage id="seasons" /></TitleTypography>
+                <TitleTypography variant="caption"><FormattedMessage id="seasonsPlayed" /></TitleTypography>
               </GridTitle>
               <Grid size={6}>
                 <ValueTypography variant="body1">{cycleSummaryData.seasons}</ValueTypography>
@@ -109,7 +109,7 @@ export default function CyclePanel({ playerName }: { playerName: string }) {
             </Grid>
             <Grid container size={{ sm: 4, md: 2}} direction="column" rowSpacing={1}>
               <GridTitle size={6}>
-                <TitleTypography variant="caption"><FormattedMessage id="cycles" /></TitleTypography>
+                <TitleTypography variant="caption"><FormattedMessage id="cyclesPlayed" /></TitleTypography>
               </GridTitle>
               <Grid size={6}>
                 <ValueTypography variant="body1">{cycleSummaryData.cycles}</ValueTypography>
