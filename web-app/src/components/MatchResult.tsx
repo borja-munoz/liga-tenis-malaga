@@ -65,9 +65,12 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
         </TitleTypography>
       </GridTitle>
       <GridTitle size={6} sx={{ textAlign: 'end' }}>
+        {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightPlayerSetOne }}>{result.gamesWonSetOne}</ValueTypography>
+        {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayerSetTwo }}>{result.gamesWonSetTwo}</ValueTypography>
         {result.superTieBreakWinner != '' && (
+          // @ts-ignore
           <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayer }}>
             {result.superTieBreakWinner == playerName ? 1 : 0}
           </ValueTypography>
@@ -81,9 +84,12 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
         </TitleTypography>
       </GridTitle>
       <GridTitle size={6} sx={{ textAlign: 'end' }}>
+        {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightOpponentSetOne }}>{result.gamesLostSetOne}</ValueTypography>
+        {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px",  fontWeight: fontWeightOpponentSetTwo }}>{result.gamesLostSetTwo}</ValueTypography>
         {result.superTieBreakWinner != '' && (
+          // @ts-ignore
           <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightOpponent }}>
             {result.superTieBreakWinner == playerName ? 0 : 1}
           </ValueTypography>
