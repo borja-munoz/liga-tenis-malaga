@@ -52,51 +52,77 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
   return (
     <Grid container rowSpacing={1} columnSpacing={1}>
       <Grid size={6}>
-        <TitleTypography variant="caption">{intl.formatMessage({ id: "cycle" }) + " " + result.cycle}</TitleTypography>
+        <TitleTypography variant="caption">{
+          result.cycle ?
+          intl.formatMessage({ id: "cycle" }) + " " + result.cycle :          
+          result.group
+        }</TitleTypography>
       </Grid>
       <Grid size={6} sx={{ textAlign: 'end' }}>
-        <TitleTypography variant="caption">{intl.formatMessage({ id: "group" }) + " " + result.group}</TitleTypography>
+        <TitleTypography variant="caption">{
+          result.cycle ?
+          intl.formatMessage({ id: "group" }) + " " + result.group :
+          result.round
+        }</TitleTypography>
       </Grid>
       <GridTitle size={6}>
-        <TitleTypography variant="body2" sx={{ fontWeight: fontWeightPlayer }}>
-          {playerName + 
-            (result.playerRetired ? ' (' + intl.formatMessage({ id: "retired" }) + ')' : '')
-          }  
-        </TitleTypography>
+        <TitleTypography variant="body2" sx={{ fontWeight: fontWeightPlayer }}>{
+          playerName + 
+          (result.playerSeed ? ' (' + result.playerSeed + ')' : '') +
+          (result.playerRetired ? ' (' + intl.formatMessage({ id: "retired" }) + ')' : '')
+        }</TitleTypography>
       </GridTitle>
       <GridTitle size={6} sx={{ textAlign: 'end' }}>
         {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightPlayerSetOne }}>{result.gamesWonSetOne}</ValueTypography>
         {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayerSetTwo }}>{result.gamesWonSetTwo}</ValueTypography>
-        {result.superTieBreakWinner != '' && (
-          // @ts-ignore
-          <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayer }}>
-            {result.superTieBreakWinner == playerName ? 1 : 0}
-          </ValueTypography>
-        )}
+        {
+          result.superTieBreakWinner ?
+            result.superTieBreakWinner != '' && (
+              // @ts-ignore
+              <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayer }}>
+                {result.superTieBreakWinner == playerName ? 1 : 0}
+              </ValueTypography>
+            ) :
+            result.gamesWonSetThree !== undefined && (
+              // @ts-ignore
+              <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayer }}>
+                {result.gamesWonSetThree}
+              </ValueTypography>
+            )
+        }
       </GridTitle>
       <GridTitle size={6}>
-        <TitleTypography variant="body2" sx={{ fontWeight: fontWeightOpponent }}>
-          {result.opponent + 
-            (result.opponentRetired ? ' (' + intl.formatMessage({ id: "retired" }) + ')' : '')
-          }  
-        </TitleTypography>
+        <TitleTypography variant="body2" sx={{ fontWeight: fontWeightOpponent }}>{
+          result.opponent + 
+          (result.opponentSeed ? ' (' + result.opponentSeed + ')' : '') +
+          (result.opponentRetired ? ' (' + intl.formatMessage({ id: "retired" }) + ')' : '')
+        }</TitleTypography>
       </GridTitle>
       <GridTitle size={6} sx={{ textAlign: 'end' }}>
         {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightOpponentSetOne }}>{result.gamesLostSetOne}</ValueTypography>
         {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px",  fontWeight: fontWeightOpponentSetTwo }}>{result.gamesLostSetTwo}</ValueTypography>
-        {result.superTieBreakWinner != '' && (
-          // @ts-ignore
-          <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightOpponent }}>
-            {result.superTieBreakWinner == playerName ? 0 : 1}
-          </ValueTypography>
-        )}
+        {
+          result.superTieBreakWinner ?
+          result.superTieBreakWinner != '' && (
+            // @ts-ignore
+            <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightOpponent }}>
+              {result.superTieBreakWinner == playerName ? 0 : 1}
+            </ValueTypography>
+          ) :
+          result.gamesLostSetThree !== undefined && (
+            // @ts-ignore
+            <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightOpponent }}>
+              {result.gamesLostSetThree}
+            </ValueTypography>
+          )
+      }
       </GridTitle>
       <Grid size={12}>
-        <TitleTypography variant="caption">{result.club}</TitleTypography>
+        <TitleTypography variant="caption" sx={{ fontStyle: "italic" }}>{result.club}</TitleTypography>
       </Grid>
     </Grid>
   );

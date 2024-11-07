@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Grid2 as Grid, Typography, styled } from "@mui/material";
 
-import { usePlayerResults } from "../models/model";
+import { usePlayerResultsCycles } from "../models/model";
 import { FormattedMessage } from "react-intl";
 
 type PlayerSummary = {
@@ -33,7 +33,7 @@ const ValueTypography = styled(Typography)(({ theme }) => ({
 
 export default function PlayerSummaryPanel({ playerName }: { playerName: string }) {
   const [playerSummary, setPlayerSummary] = useState<PlayerSummary | null>(null);
-  const { data: playerSummaryResult, status: playerSummaryStatus } = usePlayerResults(playerName);
+  const { data: playerSummaryResult, status: playerSummaryStatus } = usePlayerResultsCycles(playerName);
 
   useEffect(() => {
     setPlayerSummary(null);

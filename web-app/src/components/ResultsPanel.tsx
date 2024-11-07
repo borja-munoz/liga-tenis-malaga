@@ -3,21 +3,27 @@ import { useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Grid2 as Grid } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { usePlayerResults } from "../models/model";
+import { usePlayerResultsCycles, usePlayerResultsPlayoffs } from "../models/model";
 import { FormattedMessage } from "react-intl";
 import MatchResult from "./MatchResult";
 
 export type ResultInfo = {
   season: number;
   cycle: number;
-  group: number;
+  group: number | string;
+  round: string;
+  roundOrder: number;
   opponent: string;
+  playerSeed: number;
+  opponentSeed: number;
   club: string;
   matchWon: boolean;
   gamesWonSetOne: number;
   gamesLostSetOne: number;
   gamesWonSetTwo: number;
   gamesLostSetTwo: number;
+  gamesWonSetThree: number;
+  gamesLostSetThree: number;
   superTieBreakWinner: string;
   playerRetired: boolean;
   opponentRetired: boolean;
@@ -25,14 +31,52 @@ export type ResultInfo = {
 
 export default function ResultPanel({ playerName }: { playerName: string }) {
   const [resultsData, setResultsData] = useState<ResultInfo[][] | null>(null);
-  const { data: resultsResult, status: resultsStatus } = usePlayerResults(playerName);
+  const { data: resultsCyclesResult, status: resultsCyclesStatus } = usePlayerResultsCycles(playerName);
+  const { data: resultsPlayoffsResult, status: resultsPlayoffsStatus } = usePlayerResultsPlayoffs(playerName);
 
   useEffect(() => {
     setResultsData(null);
   }, [playerName]);
 
-  if (resultsStatus == "success" && resultsData === null) {
-    const results = resultsResult?.toArray();
+  if (resultsCyclesStatus == "success" && 
+      resultsPlayoffsStatus == "success" && 
+      resultsData === null) {
+    let results = resultsCyclesResult?.toArray();
+    results.push(...(resultsPlayoffsResult?.toArray()));
+    results.sort((a, b) => {
+      if (a.season_id < b.season_id) {
+        return -1;
+      }
+      else if (a.season_id > b.season_id) {
+        return 1;
+      }
+      else {
+        // a.season = b.season
+        if (a.cycle_order) {
+          if (a.cycle_order < b.cycle_order) {
+            return -1;
+          }
+          else if (a.cycle_order > b.cycle_order) {
+            return 1;
+          }
+          else {
+            return 0;
+          }
+        }
+        else {
+          // Playoffs
+          if (a.group_name < b.group_name) {
+            return -1;
+          }
+          else if (a.group_name > b.group_name) {
+            return 1;
+          }
+          else {
+            return a.round_order - b.round_order;
+          }
+        }
+      }  
+    });
     // Prepare results for accordion (one array element per season)
     if (results.length > 0) {
       let currentSeason = results[0].season_id;
@@ -42,13 +86,19 @@ export default function ResultPanel({ playerName }: { playerName: string }) {
         let matchWon = false;
         let season = match.season_id;
         let cycle = match.cycle_order;
-        let group = match.group_number;
+        let group = match.group_number ? match.group_number : match.group_name;
+        let round = match.round;
+        let roundOrder = match.round_order;
         let opponent: string;
+        let playerSeed: number;
+        let opponentSeed: number;
         let club = match.club;
         let gamesWonSetOne: number;
         let gamesLostSetOne: number;
         let gamesWonSetTwo: number;
         let gamesLostSetTwo: number;
+        let gamesWonSetThree: number;
+        let gamesLostSetThree: number;
         let superTieBreakWinner = '';
         let playerRetired = false;
         let opponentRetired = false;
@@ -56,17 +106,25 @@ export default function ResultPanel({ playerName }: { playerName: string }) {
         // Opponent and games won
         if (match.player_a == playerName) {
           opponent = match.player_b;
+          playerSeed = match.player_a_seed;
+          opponentSeed = match.player_b_seed;          
           gamesWonSetOne = match.games_won_player_a_set_one;
           gamesLostSetOne = match.games_won_player_b_set_one;
           gamesWonSetTwo = match.games_won_player_a_set_two;
           gamesLostSetTwo = match.games_won_player_b_set_two;
+          gamesWonSetThree = match.games_won_player_a_set_three;
+          gamesLostSetThree = match.games_won_player_b_set_three;
         }
         else {
           opponent = match.player_a;
+          playerSeed = match.player_b_seed;
+          opponentSeed = match.player_a_seed;          
           gamesWonSetOne = match.games_won_player_b_set_one;
           gamesLostSetOne = match.games_won_player_a_set_one;
           gamesWonSetTwo = match.games_won_player_b_set_two;
           gamesLostSetTwo = match.games_won_player_a_set_two;
+          gamesWonSetThree = match.games_won_player_b_set_three;
+          gamesLostSetThree = match.games_won_player_a_set_three;
         }
 
         // Retired player
@@ -99,21 +157,35 @@ export default function ResultPanel({ playerName }: { playerName: string }) {
         if (gamesWonSetTwo > gamesLostSetTwo) {
           setsWon += 1;
         }
-        if (setsWon == 2 && !playerRetired) {
-          matchWon = true;
+        if (gamesWonSetThree) {
+          if (gamesWonSetThree > gamesLostSetThree) {
+            setsWon += 1;
+            matchWon = true;
+          }  
+        }
+        else {
+          if (setsWon == 2 && !playerRetired) {
+            matchWon = true;
+          }  
         }
 
         let matchResult = {
           season,
           cycle,
           group,
+          round,
+          roundOrder,
           opponent,
+          playerSeed,
+          opponentSeed,
           club,
           matchWon,
           gamesWonSetOne,
           gamesLostSetOne,
           gamesWonSetTwo,
           gamesLostSetTwo,
+          gamesWonSetThree,
+          gamesLostSetThree,
           superTieBreakWinner,
           playerRetired,
           opponentRetired,
