@@ -1,11 +1,13 @@
-DROP TABLE results;
+DROP TABLE results_playoffs;
+DROP TABLE results_cycles;
 DROP TABLE clubs;
 DROP TABLE cycle_standings;
 DROP TABLE seasons_players;
 DROP TABLE players;
 DROP TABLE cycles;
 DROP TABLE seasons;
-DROP SEQUENCE seq_result_id;
+DROP SEQUENCE seq_result_playoff_id;
+DROP SEQUENCE seq_result_cycle_id;
 DROP SEQUENCE seq_club_id;
 DROP SEQUENCE seq_cycle_standing_id;
 DROP SEQUENCE seq_player_id;

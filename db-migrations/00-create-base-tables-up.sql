@@ -1185,10 +1185,10 @@ VALUES ('Sohail');
 INSERT INTO clubs (name)
 VALUES ('Cerrado');
 
-CREATE SEQUENCE seq_result_id START 1;
+CREATE SEQUENCE seq_result_cycle_id START 1;
 
-CREATE TABLE results (
-  id INTEGER PRIMARY KEY DEFAULT NEXTVAL('seq_result_id'),
+CREATE TABLE results_cycles (
+  id INTEGER PRIMARY KEY DEFAULT NEXTVAL('seq_result_cycle_id'),
   season_id INTEGER,
   cycle_order INTEGER,
   group_number INTEGER,
@@ -1225,7 +1225,7 @@ WITH csv_results AS (
        LEFT OUTER JOIN clubs ON csv.club = clubs.name
        LEFT OUTER JOIN players p4 ON csv.retired_player = p4.name
 )
-INSERT INTO results(
+INSERT INTO results_cycles(
   season_id, 
   cycle_order,
   group_number,
@@ -1248,6 +1248,92 @@ SELECT season,
        games_won_player_a_set_two,
        games_won_player_b_set_one,
        games_won_player_b_set_two,
+       super_tie_break_winner_id,
+       club_id,
+       retired_player_id
+FROM csv_results;
+
+CREATE SEQUENCE seq_result_playoff_id START 1;
+
+CREATE TABLE results_playoffs (
+  id INTEGER PRIMARY KEY DEFAULT NEXTVAL('seq_result_playoff_id'),
+  season_id INTEGER,
+  group_name VARCHAR,
+  round VARCHAR,
+  round_order INTEGER,
+  player_a_id INTEGER,
+  player_b_id INTEGER,
+  player_a_seed INTEGER,
+  player_b_seed INTEGER,
+  games_won_player_a_set_one INTEGER,
+  games_won_player_a_set_two INTEGER,
+  games_won_player_a_set_three INTEGER,
+  games_won_player_b_set_one INTEGER,
+  games_won_player_b_set_two INTEGER,
+  games_won_player_b_set_three INTEGER,
+  super_tie_break_winner_id INTEGER,
+  club_id INTEGER,
+  retired_player_id INTEGER,
+  FOREIGN KEY (player_a_id) REFERENCES players(id),
+  FOREIGN KEY (player_b_id) REFERENCES players(id),
+  FOREIGN KEY (super_tie_break_winner_id) REFERENCES players(id),
+  FOREIGN KEY (club_id) REFERENCES clubs(id),
+  FOREIGN KEY (retired_player_id) REFERENCES players(id)
+);
+
+WITH csv_results AS (
+  SELECT season, group_name, round, round_order, 
+         p1.id AS player_a_id, p2.id AS player_b_id, 
+         player_a_seed, player_b_seed,
+         games_won_player_a_set_one,
+         games_won_player_a_set_two,
+         games_won_player_a_set_three,
+         games_won_player_b_set_one,
+         games_won_player_b_set_two,
+         games_won_player_b_set_three,
+         p3.id AS super_tie_break_winner_id,
+         clubs.id AS club_id,
+         p4.id AS retired_player_id
+  FROM read_csv('data-scraper/results-playoff.csv', delim = ',', header = true) csv
+       INNER JOIN players p1 ON csv.player_a = p1.name
+       INNER JOIN players p2 ON csv.player_b = p2.name
+       LEFT OUTER JOIN players p3 ON csv.super_tie_break_winner = p3.name
+       LEFT OUTER JOIN clubs ON csv.club = clubs.name
+       LEFT OUTER JOIN players p4 ON csv.retired_player = p4.name
+)
+INSERT INTO results_playoffs(
+  season_id, 
+  group_name,
+  round,
+  round_order,
+  player_a_id,
+  player_b_id,
+  player_a_seed,
+  player_b_seed,
+  games_won_player_a_set_one,
+  games_won_player_a_set_two,
+  games_won_player_a_set_three,
+  games_won_player_b_set_one,
+  games_won_player_b_set_two,
+  games_won_player_b_set_three,
+  super_tie_break_winner_id,
+  club_id,
+  retired_player_id
+) 
+SELECT season, 
+       group_name,
+       round,
+       round_order,
+       player_a_id,
+       player_b_id,
+       player_a_seed,
+       player_b_seed,
+       games_won_player_a_set_one,
+       games_won_player_a_set_two,
+       games_won_player_a_set_three,
+       games_won_player_b_set_one,
+       games_won_player_b_set_two,
+       games_won_player_b_set_three,
        super_tie_break_winner_id,
        club_id,
        retired_player_id
