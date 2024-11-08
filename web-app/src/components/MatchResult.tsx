@@ -65,14 +65,14 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
           result.round
         }</TitleTypography>
       </Grid>
-      <GridTitle size={6}>
+      <GridTitle size={8}>
         <TitleTypography variant="body2" sx={{ fontWeight: fontWeightPlayer }}>{
           playerName + 
           (result.playerSeed ? ' (' + result.playerSeed + ')' : '') +
           (result.playerRetired ? ' (' + intl.formatMessage({ id: "retired" }) + ')' : '')
         }</TitleTypography>
       </GridTitle>
-      <GridTitle size={6} sx={{ textAlign: 'end' }}>
+      <GridTitle size={4} sx={{ textAlign: 'end' }}>
         {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightPlayerSetOne }}>{result.gamesWonSetOne}</ValueTypography>
         {/* @ts-ignore */}
@@ -85,7 +85,7 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
                 {result.superTieBreakWinner == playerName ? 1 : 0}
               </ValueTypography>
             ) :
-            result.gamesWonSetThree !== undefined && (
+            result.gamesWonSetThree != null && (
               // @ts-ignore
               <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightPlayer }}>
                 {result.gamesWonSetThree}
@@ -93,18 +93,18 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
             )
         }
       </GridTitle>
-      <GridTitle size={6}>
+      <GridTitle size={8}>
         <TitleTypography variant="body2" sx={{ fontWeight: fontWeightOpponent }}>{
           result.opponent + 
           (result.opponentSeed ? ' (' + result.opponentSeed + ')' : '') +
           (result.opponentRetired ? ' (' + intl.formatMessage({ id: "retired" }) + ')' : '')
         }</TitleTypography>
       </GridTitle>
-      <GridTitle size={6} sx={{ textAlign: 'end' }}>
+      <GridTitle size={4} sx={{ textAlign: 'end' }}>
         {/* @ts-ignore */}
         <ValueTypography component="span" variant="body2" sx={{ fontWeight: fontWeightOpponentSetOne }}>{result.gamesLostSetOne}</ValueTypography>
         {/* @ts-ignore */}
-        <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px",  fontWeight: fontWeightOpponentSetTwo }}>{result.gamesLostSetTwo}</ValueTypography>
+        <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightOpponentSetTwo }}>{result.gamesLostSetTwo}</ValueTypography>
         {
           result.superTieBreakWinner ?
           result.superTieBreakWinner != '' && (
@@ -113,13 +113,13 @@ export default function MatchResult({ playerName, result }:{ playerName: string,
               {result.superTieBreakWinner == playerName ? 0 : 1}
             </ValueTypography>
           ) :
-          result.gamesLostSetThree !== undefined && (
+          result.gamesLostSetThree != null && (
             // @ts-ignore
             <ValueTypography component="span" variant="body2" sx={{ marginLeft: "10px", fontWeight: fontWeightOpponent }}>
               {result.gamesLostSetThree}
             </ValueTypography>
           )
-      }
+        }
       </GridTitle>
       <Grid size={12}>
         <TitleTypography variant="caption" sx={{ fontStyle: "italic" }}>{result.club}</TitleTypography>
