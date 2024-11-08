@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router';
 import DefaultView from './components/DefaultView';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -23,6 +24,7 @@ const routes = [
       <DefaultView />
     ),
     children: [
+      { path: ROUTE_PATHS.DEFAULT, element: <Navigate to={ROUTE_PATHS.DASHBOARD} /> },
       { path: ROUTE_PATHS.DASHBOARD, element: <Dashboard /> },
     ],
   },
