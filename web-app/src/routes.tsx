@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import { Navigate } from 'react-router';
 import DefaultView from './components/DefaultView';
 
-const HomePage = lazy(() => import('./pages/HomePage'));
+// const HomePage = lazy(() => import('./pages/HomePage'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
