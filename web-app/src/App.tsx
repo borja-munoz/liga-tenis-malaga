@@ -29,7 +29,7 @@ function App() {
 
   return (
     <AppContext.Provider
-      value={{DEFAULT_APP_CONTEXT}}
+      value={{...DEFAULT_APP_CONTEXT}}
     >
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
