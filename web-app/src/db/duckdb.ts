@@ -40,7 +40,7 @@ const initDB = async () => {
 
 const loadDB = async () => {
   const db = await initDB();
-  const dbPath = "http://localhost:5173/db/liga_tenis_malaga.duckdb";
+  const dbPath = "https://borja-munoz.github.io/liga-tenis-malaga/db/liga_tenis_malaga.duckdb";
   await db.open({ 
     accessMode: DuckDBAccessMode.READ_ONLY,
     path: dbPath
