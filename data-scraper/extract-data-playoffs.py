@@ -12,6 +12,8 @@ playoff_urls = [
   'http://www.tenismalaga.es/temporada7/playoff/playofftemporada7.html'
 ];
 
+players = set()
+seasons_players = []
 playoff_data = []
 season_index = 1
 rounds = []
@@ -23,6 +25,8 @@ player_b_seeds = []
 for url in playoff_urls:
   page = requests.get(url)
   soup = BeautifulSoup(page.content, 'html.parser')
+
+  seasons_players.append(set())
 
   font_elements = soup.select('font')
   if len(font_elements) == 0:
@@ -108,6 +112,14 @@ for url in playoff_urls:
             player_a_seeds[current_round - column_offset_rounds] = player_a_seed
             player_b_names[current_round - column_offset_rounds] = player_b_name
             player_b_seeds[current_round - column_offset_rounds] = player_b_seed
+      if player_a_name not in players:
+        players.add(player_a_name)
+      if player_a_name not in seasons_players[season_index - 1]:
+        seasons_players[season_index - 1].add(player_a_name)
+      if player_b_name not in players:
+        players.add(player_b_name)
+      if player_b_name not in seasons_players[season_index - 1]:
+        seasons_players[season_index - 1].add(player_b_name)
     elif '-' in fe.text:
       index = 0
       start_index = 0
@@ -210,6 +222,23 @@ for url in playoff_urls:
     # if results_table:
     #   current_round = (current_round + 1) % len(rounds)
   season_index += 1
+
+with open('players_playoffs.csv', 'w', newline='') as csvfile:
+    spamwriter = csv.writer(csvfile, delimiter=',')
+    spamwriter.writerow(['name'])
+    players_ordered = sorted(players)
+    for player in players_ordered:
+      if len(player) > 2:
+        spamwriter.writerow([player])
+
+with open('seasons_players_playoffs.csv', 'w', newline='') as csvfile:
+    spamwriter = csv.writer(csvfile, delimiter=',')
+    spamwriter.writerow(['season_id', 'player_name'])
+    for season_index in range(1, len(playoff_urls) + 1):
+      players_ordered = sorted(seasons_players[season_index - 1])
+      for player in players_ordered:
+        if len(player) > 2:
+          spamwriter.writerow([season_index, player])
 
 with open('results-playoff.csv', 'w', newline='') as csvfile:
     fieldnames = [
