@@ -219,9 +219,17 @@ export default function ResultPanel({ playerName }: { playerName: string }) {
                   <FormattedMessage id="season" /> {seasonResults[0].season}
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Grid container size={12} rowSpacing={6} columnSpacing={10}>
+                  <Grid container size={12} rowSpacing={5} columnSpacing={5}>
                     {seasonResults.map((result) => (
-                      <Grid key={result.cycle + result.opponent} size={{ xs: 12, sm: 4, md: 3 }}>
+                      <Grid key={result.cycle + result.opponent} 
+                            size={{ xs: 12, sm: 4, md: 3 }}
+                            sx={{ 
+                              padding: "10px", 
+                              border: "1px #DDDDDD solid",
+                              borderRadius: "5px",
+                              boxShadow: "3px 3px #FAFAFA"
+                            }}
+                      >
                         <MatchResult 
                           key={result.opponent} 
                           playerName={playerName} 
