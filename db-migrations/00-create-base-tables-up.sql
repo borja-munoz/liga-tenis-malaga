@@ -1060,6 +1060,11 @@ INSERT INTO players(name)
 SELECT name 
 FROM read_csv('data-scraper/players.csv', delim = ',', header = true);
 
+INSERT INTO players(name) 
+SELECT name 
+FROM read_csv('data-scraper/players_playoffs.csv', delim = ',', header = true) csv
+WHERE NOT EXISTS (FROM players p WHERE csv.name = p.name);
+
 CREATE TABLE seasons_players (
   season_id INTEGER,
   player_id INTEGER,
@@ -1075,6 +1080,20 @@ WITH csv_seasons_players AS (
 INSERT INTO seasons_players(season_id, player_id) 
 SELECT season_id, id AS player_id
 FROM csv_seasons_players;
+
+WITH csv_seasons_players AS (
+  SELECT season_id, p.id
+  FROM read_csv('data-scraper/seasons_players_playoffs.csv', delim = ',', header = true) csv
+       INNER JOIN players p ON csv.player_name = p.name
+)
+INSERT INTO seasons_players(season_id, player_id) 
+SELECT season_id, id AS player_id
+FROM csv_seasons_players csv
+WHERE NOT EXISTS (
+  FROM seasons_players sp
+  WHERE csv.season_id = sp.season_id AND
+        csv.id = sp.player_id
+);
 
 CREATE SEQUENCE seq_cycle_standing_id START 1;
 
