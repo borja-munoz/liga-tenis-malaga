@@ -1,6 +1,10 @@
 # Workflow for deploying to GitHub Pages
 name: Deploy to GitHub Pages
 
+defaults:
+  run:
+    working-directory: ./web-app
+
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -38,10 +42,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: yarn
-        working-directory: web-app
       - name: Build
         run: yarn build
-        working-directory: web-app
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
