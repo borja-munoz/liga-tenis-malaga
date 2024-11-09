@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Grid2 as Grid, Typography, styled } from "@mui/material";
 
-import { usePlayerResultsCycles } from "../models/model";
+import { usePlayerResultsCycles, usePlayerResultsPlayoffs } from "../models/model";
 import { FormattedMessage } from "react-intl";
 
 type PlayerSummary = {
@@ -33,14 +33,52 @@ const ValueTypography = styled(Typography)(({ theme }) => ({
 
 export default function PlayerSummaryPanel({ playerName }: { playerName: string }) {
   const [playerSummary, setPlayerSummary] = useState<PlayerSummary | null>(null);
-  const { data: playerSummaryResult, status: playerSummaryStatus } = usePlayerResultsCycles(playerName);
+  const { data: resultsCyclesResult, status: resultsCyclesStatus } = usePlayerResultsCycles(playerName);
+  const { data: resultsPlayoffsResult, status: resultsPlayoffsStatus } = usePlayerResultsPlayoffs(playerName);
 
   useEffect(() => {
     setPlayerSummary(null);
   }, [playerName]);
 
-  if (playerSummaryStatus == "success" && playerSummary === null) {
-    const matches = playerSummaryResult?.toArray();
+  if (resultsCyclesStatus == "success" && 
+      resultsPlayoffsStatus == "success" && 
+      playerSummary === null) {
+    let matches = resultsCyclesResult?.toArray();
+    matches.push(...(resultsPlayoffsResult?.toArray()));
+    matches.sort((a, b) => {
+      if (a.season_id < b.season_id) {
+        return -1;
+      }
+      else if (a.season_id > b.season_id) {
+        return 1;
+      }
+      else {
+        // a.season = b.season
+        if (a.cycle_order) {
+          if (a.cycle_order < b.cycle_order) {
+            return -1;
+          }
+          else if (a.cycle_order > b.cycle_order) {
+            return 1;
+          }
+          else {
+            return 0;
+          }
+        }
+        else {
+          // Playoffs
+          if (a.group_name < b.group_name) {
+            return -1;
+          }
+          else if (a.group_name > b.group_name) {
+            return 1;
+          }
+          else {
+            return a.round_order - b.round_order;
+          }
+        }
+      }  
+    });
     const matchesPlayed = matches.length;
     let matchesWon = 0;
     let matchesLost = 0;
@@ -93,11 +131,25 @@ export default function PlayerSummaryPanel({ playerName }: { playerName: string 
       else {
         setsWonPlayerB += 1;
       }
+      // Third set 
+      if (match.games_won_player_b_set_three != null) {
+        if (match.games_won_player_a_set_three >
+            match.games_won_player_b_set_three) {
+          setsWonPlayerA += 1;
+        }        
+        else {
+          setsWonPlayerB += 1;
+        }  
+      }
       // Games
       let gamesWonPlayerA = match.games_won_player_a_set_one +
                             match.games_won_player_a_set_two;
       let gamesWonPlayerB = match.games_won_player_b_set_one + 
                             match.games_won_player_b_set_two;
+      if (match.games_won_player_a_set_three != null) {
+        gamesWonPlayerA += match.games_won_player_a_set_three;
+        gamesWonPlayerB += match.games_won_player_b_set_three;
+      }                      
       if (match.player_a == playerName) {
         setsWon += setsWonPlayerA;
         setsLost += setsWonPlayerB;
