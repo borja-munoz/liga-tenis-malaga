@@ -1,9 +1,8 @@
 .zoom-in-out-box {
   width: 100px;
   height: 100px;
-  background: #f50057;
+  background-image: url(tennis-ball.svg);
   animation: zoom-in-zoom-out 1s ease infinite;
-  border-radius: 0.5rem;
 }
 
 @keyframes zoom-in-zoom-out {
