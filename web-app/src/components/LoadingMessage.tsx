@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import imgUrl from '/tennis-ball.svg';
 
 export default function LoadingMessage() {
   return (
@@ -11,7 +12,13 @@ export default function LoadingMessage() {
         minHeight: "100vh",
       }}
     >
-      <div className="zoom-in-out-box"></div>
+      <div 
+        className="zoom-in-out-box"
+        style={{
+          backgroundImage: `url("${imgUrl}")`
+        }}
+      >
+      </div>
     </Box>
   );
 }
