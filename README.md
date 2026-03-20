@@ -1,9 +1,71 @@
 # Liga Tenis Málaga
 
-This project includes the following components:
+Web application to explore statistics and match history for a regional tennis league in Málaga, Spain, covering 8 seasons from 2017 to 2025.
 
-- Data Scraper to get all the data from the web in CSV format
+## Live Demo
 
-- SQL scripts to load the data from the CSV files into a DuckDB database
+[https://borja-munoz.github.io/liga-tenis-malaga/](https://borja-munoz.github.io/liga-tenis-malaga/)
 
-- Web application to explore the data
+## Architecture Overview
+
+```
+liga-tenis-malaga/
+├── data-scraper/        # Python scripts that extract data from the league website
+├── db-migrations/       # SQL scripts that build the DuckDB database from CSV files
+└── web-app/             # React + TypeScript single-page application
+```
+
+Data flows in one direction:
+
+```
+League website (tenismalaga.es)
+        │
+        ▼
+  data-scraper/          ← Python + BeautifulSoup → CSV files
+        │
+        ▼
+  db-migrations/         ← DuckDB SQL → liga_tenis_malaga.duckdb
+        │
+        ▼
+  web-app/               ← DuckDB-Wasm loads DB in the browser → UI
+```
+
+## Components
+
+### Data Scraper (`data-scraper/`)
+
+Python scripts that scrape the league website and produce CSV files used to populate the database.
+
+See [data-scraper/README.md](data-scraper/README.md) for details.
+
+### Database Migrations (`db-migrations/`)
+
+SQL scripts that create the DuckDB schema and load data from the CSV files produced by the scraper.
+
+See [db-migrations/README.md](db-migrations/README.md) for details.
+
+### Web Application (`web-app/`)
+
+React + TypeScript SPA that loads the compiled DuckDB database file and lets users browse player statistics, cycle standings, and match results.
+
+See [web-app/README.md](web-app/README.md) for details.
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React, TypeScript, Vite |
+| UI components | Material-UI (MUI) |
+| Charts | Apache ECharts |
+| In-browser database | DuckDB-Wasm |
+| Data fetching | TanStack React Query |
+| Internationalisation | React Intl (EN / ES) |
+| Data scraping | Python, BeautifulSoup |
+| Deployment | GitHub Pages |
+
+## League Structure
+
+- **8 seasons** — October to June, from 2017–18 to 2024–25
+- **Cycles** — 5–6 regular cycles per season, each followed by a Play Off
+- **Groups** — players are organised into skill-based groups within each cycle
+- **Clubs** — Haza, CRC, Sohail, Cerrado
