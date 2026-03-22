@@ -69,3 +69,15 @@ See [web-app/README.md](web-app/README.md) for details.
 - **Cycles** — 5–6 regular cycles per season, each followed by a Play Off
 - **Groups** — players are organised into skill-based groups within each cycle
 - **Clubs** — Haza, CRC, Sohail, Cerrado
+
+## Pending Features
+
+- Head-to-head
+- Playoff panel with chart for reached round per season (like cycles) and summary 
+
+## Benchmark
+
+- 9.2 MB transferred on initialization -> opening the database and reading players. Most of it corresponds to the WASM file (7.3 MB)
+- For some reason, it tries to open WAL files even if we are opening the database in read-only mode. Maybe there is some reference in the .duckdb file to them. It might be possible that I copied the db file when it was still open.
+- Getting the data for a player needs 1.0 MB additional. All the requests to the duckdb file are partial requests (status 206)
+- Selecting another player does not request additional data 
