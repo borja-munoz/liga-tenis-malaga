@@ -1230,6 +1230,13 @@ WHERE NOT EXISTS (
 
 CREATE SEQUENCE seq_cycle_standing_id START 1;
 
+-- I have to remove the foreign key constraints because
+-- when I try later in db migration 01 to consolidate the
+-- player records belonging to the same player, an error
+-- is thrown, explained here:
+-- https://github.com/duckdb/duckdb/issues/1631
+-- Updating a record creates a delete and an insert statement
+-- but the unique constraint is checked too soon so it fails 
 CREATE TABLE cycle_standings (
   id INTEGER PRIMARY KEY DEFAULT NEXTVAL('seq_cycle_standing_id'),
   cycle_id INTEGER,
