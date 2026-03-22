@@ -28,5 +28,6 @@
     "@vitejs/plugin-react": "latest",
     "typescript": "latest",
     "vite": "latest"
-  }
+  },
+  "packageManager": "yarn@4.5.2"
 }

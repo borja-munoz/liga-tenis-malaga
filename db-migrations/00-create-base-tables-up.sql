@@ -95,6 +95,17 @@ VALUES (
   DATE '2025-06-01'
 );
 
+INSERT INTO seasons (
+  name, 
+  start_date, 
+  end_date
+)
+VALUES (
+  'Temporada 9', 
+  DATE '2025-09-22',
+  DATE '2026-06-07'
+);
+
 CREATE SEQUENCE seq_cycle_id START 1;
 
 CREATE TABLE cycles (
@@ -1049,6 +1060,128 @@ VALUES
   DATE '2025-06-01'
 );
 
+-------------------------------
+-- Season 9
+-------------------------------
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  9,
+  1,
+  'Ciclo 1',
+  DATE '2025-09-22',
+  DATE '2025-10-26'
+);
+
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  9,
+  2,
+  'Ciclo 2',
+  DATE '2025-10-27',
+  DATE '2025-11-30'
+);
+
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  9,
+  3,
+  'Ciclo 3',
+  DATE '2025-12-01',
+  DATE '2026-01-11'
+);
+
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  9,
+  4,
+  'Ciclo 4',
+  DATE '2026-01-12',
+  DATE '2026-02-22'
+);
+
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  9,
+  5,
+  'Ciclo 5',
+  DATE '2026-02-23',
+  DATE '2026-03-29'
+);
+
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  9,
+  6,
+  'Ciclo 6',
+  DATE '2026-03-30',
+  DATE '2026-05-03'
+);
+
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  9,
+  7,
+  'Play Off',
+  DATE '2026-05-04',
+  DATE '2026-06-07'
+);
+
 CREATE SEQUENCE seq_player_id START 1;
 
 CREATE TABLE players (
@@ -1097,6 +1230,13 @@ WHERE NOT EXISTS (
 
 CREATE SEQUENCE seq_cycle_standing_id START 1;
 
+-- I have to remove the foreign key constraints because
+-- when I try later in db migration 01 to consolidate the
+-- player records belonging to the same player, an error
+-- is thrown, explained here:
+-- https://github.com/duckdb/duckdb/issues/1631
+-- Updating a record creates a delete and an insert statement
+-- but the unique constraint is checked too soon so it fails 
 CREATE TABLE cycle_standings (
   id INTEGER PRIMARY KEY DEFAULT NEXTVAL('seq_cycle_standing_id'),
   cycle_id INTEGER,
