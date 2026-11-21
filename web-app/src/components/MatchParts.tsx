@@ -81,13 +81,16 @@ function PlayerLine({
   );
 }
 
-/** Two-row scoreboard: the player on top, the opponent below */
-export function MatchCard({ match, context }: { match: Match; context: string }) {
+/**
+ * Two-row scoreboard: the player on top, the opponent below. A neutral card
+ * (a match between two other players) has no win/loss badge.
+ */
+export function MatchCard({ match, context, neutral = false }: { match: Match; context: string; neutral?: boolean }) {
   return (
     <article className="match-card">
       <div className="match-card__meta">
         <span>{context}</span>
-        <ResultBadge won={match.won} pill />
+        {!neutral && <ResultBadge won={match.won} pill />}
       </div>
       <PlayerLine
         name={match.playerName}
@@ -95,7 +98,7 @@ export function MatchCard({ match, context }: { match: Match; context: string })
         retired={match.playerRetired}
         cells={match.sets.map((s) => s.mine)}
         isWinner={match.won}
-        isMe
+        isMe={!neutral}
       />
       <PlayerLine
         name={match.opponentName}

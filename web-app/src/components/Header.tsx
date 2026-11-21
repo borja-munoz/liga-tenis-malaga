@@ -3,7 +3,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 
 import { useCurrentCycle } from "../models/model";
 import { getLastPlayerId, parseId } from "../lib/lastPlayer";
-import { h2hPath, playerPath } from "../routes";
+import { groupPath, h2hPath, playerPath } from "../routes";
 import { BallLogo } from "./Icons";
 import PlayerSearch from "./PlayerSearch";
 
@@ -15,6 +15,7 @@ export default function Header() {
 
   const playerMatch = matchPath("/player/:playerId/*", pathname) ?? matchPath("/player/:playerId", pathname);
   const h2hMatch = matchPath("/h2h/:playerA/*", pathname) ?? matchPath("/h2h/:playerA", pathname);
+  const isCycleSection = pathname === "/" || pathname.startsWith("/group");
   const isPlayerSection = pathname.startsWith("/player");
   const isH2HSection = pathname.startsWith("/h2h");
 
@@ -24,7 +25,7 @@ export default function Header() {
   return (
     <header className="app-header">
       <div className="app-header__inner">
-        <Link to={playerPath(playerId)} className="brand">
+        <Link to={groupPath()} className="brand">
           <BallLogo />
           <span className="brand__name">
             Liga Tenis <span>Málaga</span>
@@ -32,6 +33,13 @@ export default function Header() {
         </Link>
 
         <nav className="main-nav" aria-label={intl.formatMessage({ id: "nav.label" })}>
+          <Link
+            to={groupPath()}
+            className={"main-nav__link" + (isCycleSection ? " is-active" : "")}
+            aria-current={isCycleSection ? "page" : undefined}
+          >
+            <FormattedMessage id="nav.cycle" />
+          </Link>
           <Link
             to={playerPath(playerId)}
             className={"main-nav__link" + (isPlayerSection ? " is-active" : "")}

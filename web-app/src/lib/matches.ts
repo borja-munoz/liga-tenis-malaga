@@ -208,6 +208,8 @@ export interface CycleStanding {
   position: number | null;
   points: number | null;
   startDate: number | null;
+  /** Cycle still being played: position and points can still change */
+  provisional?: boolean;
 }
 
 export interface CycleSummary {
@@ -233,7 +235,7 @@ export function summarizeCycles(rows: CycleStanding[]): CycleSummary {
       bestGroup = r.group;
       bestGroupIndex = i;
     }
-    totalPoints += r.points ?? 0;
+    if (!r.provisional) totalPoints += r.points ?? 0;
   });
   const last = rows[rows.length - 1];
   return {

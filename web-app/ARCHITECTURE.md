@@ -69,9 +69,15 @@ There is no external state management library (no Redux, Zustand, etc.). The com
 Routes are defined in `src/routes.tsx` and lazily loaded with `React.lazy` + `Suspense` for code splitting.
 
 ```
-/           → Dashboard (lazy)
-*           → NotFound (lazy)
+/                          → HomePage: current cycle, opened on the "me" player's group
+/group/:group              → HomePage on that group
+/player/:playerId          → PlayerPage
+/player/:playerId/matches  → MatchesPage
+/h2h/:playerA/:playerB     → H2HPage
+*                          → NotFound
 ```
+
+The "me" player ("This is me" on the player page) is kept in `localStorage` by `src/lib/me.ts`.
 
 `DefaultView` acts as a persistent layout shell (header + `<Outlet />`).
 `HashRouter` is used so that GitHub Pages can serve the app without server-side routing configuration.

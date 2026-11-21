@@ -7,30 +7,23 @@ SQL scripts that create the DuckDB schema and populate it from the CSV files pro
 - [DuckDB CLI](https://duckdb.org/docs/installation/) installed
 - CSV files present in `data-scraper/` (run the scraper scripts first)
 
-## Running the Migration
+## Building the Database
 
-Execute the script from the repository root so that the relative paths to the CSV files resolve correctly:
-
-```bash
-rm -f /tmp/stage.duckdb
-duckdb /tmp/stage.duckdb < db-migrations/00-create-base-tables-up.sql
-duckdb /tmp/stage.duckdb < db-migrations/01-consolidate-players.sql
-```
-
-`01-consolidate-players.sql` merges player records that belong to the same person, matching them **by name** (player ids shift whenever new players are scraped). To merge more players, add `(alias, canonical)` rows to its `player_aliases` table. The script fails if a name in that table does not exist.
-
-The updates in the consolidation step leave free space in the file, so export and re-import it into a compact copy before publishing. Close every connection to the database before copying it, or DuckDB-Wasm will look for a `.wal` file:
+Run the build script from anywhere:
 
 ```bash
-rm -rf /tmp/stage-export
-duckdb /tmp/stage.duckdb -readonly -c "EXPORT DATABASE '/tmp/stage-export' (FORMAT parquet);"
-rm -f web-app/public/db/liga_tenis_malaga.duckdb
-duckdb web-app/public/db/liga_tenis_malaga.duckdb -c "IMPORT DATABASE '/tmp/stage-export';"
+./scripts/build-db.sh
 ```
 
-The web app uses DuckDB-Wasm 1.29 (DuckDB 1.1), so the file must use storage version `v1.0.0`, which is the default for newly created databases.
+It runs the migrations into a temporary database, checks the data and, only if every check passes, writes a compact copy to `web-app/public/db/liga_tenis_malaga.duckdb`:
 
-The resulting `.duckdb` file is placed in `web-app/public/db/` so that it is included in the Vite build and served by GitHub Pages.
+1. `00-create-base-tables-up.sql` creates the tables and loads the CSV files (it must run from the repository root, which the script takes care of).
+2. `01-consolidate-players.sql` merges player records that belong to the same person, matching them **by name** (player ids shift whenever new players are scraped). To merge more players, add `(alias, canonical)` rows to its `player_aliases` table. The script fails if a name in that table does not exist.
+3. `check-data.sql` checks the current season: every scraped standings row and result was loaded, the newest cycle has standings, and both players of every result are in that group.
+4. `check-against-previous.sql` compares with the published database: no cycle may lose standings rows or results.
+5. The data is exported and imported into a new file, which drops the free space left by the consolidation updates.
+
+The web app uses DuckDB-Wasm 1.29 (DuckDB 1.1), so the file must use storage version `v1.0.0`, which is the default for newly created databases. The GitHub Action uses DuckDB CLI 1.5.1.
 
 ## Schema
 
@@ -59,7 +52,7 @@ One row per league season.
 | start_date | DATE | Season start date |
 | end_date | DATE | Season end date |
 
-10 seasons are defined, from 2017-10-10 to the current season (2026–27). Season 10 only has the cycles completed so far.
+10 seasons are defined, from 2017-10-10 to the current season (2026–27).
 
 ---
 
@@ -75,6 +68,8 @@ One row per cycle within a season. Each season has 5–6 regular cycles plus a P
 | name | VARCHAR | Cycle name ("Ciclo 1", "Ciclo 2", …, "Play Off") |
 | start_date | DATE | Cycle start date |
 | end_date | DATE | Cycle end date |
+
+Loaded from `data-scraper/cycles.csv`. The scraper adds each new cycle when its page appears, so the cycle being played is included; the app treats a cycle whose end date has not passed as in progress (provisional standings).
 
 ---
 
@@ -189,3 +184,13 @@ Individual match results from Play Off rounds. Playoffs can go to three sets.
 | super_tie_break_winner_id | INTEGER | FK → players (NULL if no super tiebreak) |
 | club_id | INTEGER | FK → clubs (NULL if not recorded) |
 | retired_player_id | INTEGER | FK → players (NULL if no retirement) |
+
+---
+
+#### `metadata`
+
+One row with the time the database was built, shown in the app as the data update date.
+
+| Column | Type | Description |
+|---|---|---|
+| updated_at | TIMESTAMP | Build time, in UTC |

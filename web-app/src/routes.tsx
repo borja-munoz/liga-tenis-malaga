@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { Navigate } from 'react-router';
 import DefaultView from './components/DefaultView';
 
+const HomePage = lazy(() => import('./pages/HomePage'));
 const PlayerPage = lazy(() => import('./pages/PlayerPage'));
 const MatchesPage = lazy(() => import('./pages/MatchesPage'));
 const H2HPage = lazy(() => import('./pages/H2HPage'));
@@ -14,6 +15,8 @@ export const ROUTE_PATHS = {
   NOT_FOUND: '/404',
 };
 
+/** Home page: the current cycle, opened on a group */
+export const groupPath = (group?: number | null) => (group ? `/group/${group}` : '/');
 export const playerPath = (id?: number | null) => (id ? `/player/${id}` : '/player');
 export const matchesPath = (id: number) => `/player/${id}/matches`;
 export const h2hPath = (a?: number | null, b?: number | null) =>
@@ -24,7 +27,8 @@ const routes = [
     path: ROUTE_PATHS.DEFAULT,
     element: <DefaultView />,
     children: [
-      { path: ROUTE_PATHS.DEFAULT, element: <Navigate to={ROUTE_PATHS.PLAYER} replace /> },
+      { path: ROUTE_PATHS.DEFAULT, element: <HomePage /> },
+      { path: '/group/:group', element: <HomePage /> },
       // Old URL, kept so existing links and bookmarks still work
       { path: '/dashboard', element: <Navigate to={ROUTE_PATHS.PLAYER} replace /> },
       { path: '/player', element: <PlayerPage /> },

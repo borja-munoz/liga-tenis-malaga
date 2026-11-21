@@ -1250,3 +1250,104 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .app-toast { animation: none; }
 }
+
+/* ---------- Home: current cycle ---------- */
+.cycle-hero { flex-direction: column; justify-content: space-between; gap: 18px; }
+.cycle-hero__title { font-size: 26px; }
+.cycle-hero__progress { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+.cycle-hero__updated { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+@media (min-width: 900px) {
+  .cycle-hero__title { font-size: 34px; }
+}
+
+.group-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.group-nav__title { text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.icon-button.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+
+.group-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.group-tools .chip { text-decoration: none; }
+.group-tools__search { flex: 1 1 200px; min-width: 0; }
+
+.standings { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.standings th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-align: left;
+  padding: 6px 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.standings th.num, .standings td.num { text-align: right; }
+.standings abbr { text-decoration: none; }
+.standings td { padding: 10px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.standings tr:last-child td { border-bottom: 0; }
+.standings__pos { width: 24px; color: var(--text-3); font-weight: 600; }
+.standings__name { max-width: 0; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.standings__name a { color: var(--text); text-decoration: none; font-weight: 600; }
+.standings__name a:hover { color: var(--yellow); }
+.standings__points { font-family: var(--font-display); font-weight: 700; }
+.standings__target { white-space: nowrap; text-align: right; }
+.standings th.standings__target { text-align: right; }
+.standings tr.is-me td { background: rgba(255, 214, 10, 0.12); }
+.standings tr.is-me td:first-child { border-radius: 10px 0 0 10px; }
+.standings tr.is-me td:last-child { border-radius: 0 10px 10px 0; }
+.standings tr.is-me .standings__name a,
+.standings tr.is-me .standings__points { color: var(--yellow); }
+.standings__note { margin-top: 10px; }
+.only-desktop-cell { display: none; }
+@media (min-width: 900px) {
+  .standings { font-size: 15px; }
+  .only-desktop-cell { display: table-cell; }
+}
+
+.target { font-size: 12px; font-weight: 600; color: var(--text-2); }
+.target--up { color: var(--yellow); }
+.target--down { color: var(--steel); }
+
+.group-results { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.group-results__subtitle { font-size: 14px; font-weight: 700; margin-top: 6px; color: var(--text-2); }
+.pending-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.pending-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text-2);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+}
+.pending-list li > span:not(.pending-list__vs) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pending-list li > span:last-child { text-align: right; }
+.pending-list__vs { flex: none; font-size: 11px; color: var(--text-3); }
+.pending-list li.is-me { border-color: rgba(255, 214, 10, 0.55); color: var(--text); }
+
+.me-prompt { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.me-prompt .card__hint { margin: 4px 0 0; }
+.me-prompt__search { flex: 1 1 260px; max-width: 420px; }
+
+/* "This is me" toggle in the player hero */
+.me-toggle {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 214, 10, 0.5);
+  background: transparent;
+  color: var(--yellow);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+.me-toggle.is-active { color: var(--navy-900); background: var(--gold-fill); border-color: transparent; }
+.hero__group-link { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.cycles__note { margin-top: 10px; }
+.page--home { width: 100%; box-sizing: border-box; }
+@media (min-width: 900px) {
+  .page--home .col-side { flex: 0 0 min(420px, 36%); }
+  /* In the corner, so the hero (which fits the viewport) keeps its height */
+  .me-toggle { position: absolute; top: 20px; right: 24px; margin: 0; height: 28px; font-size: 12px; }
+}

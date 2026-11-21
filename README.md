@@ -50,6 +50,18 @@ React + TypeScript SPA that loads the compiled DuckDB database file and lets use
 
 See [web-app/README.md](web-app/README.md) for details.
 
+## Data Updates
+
+The GitHub Action [`update-data.yml`](.github/workflows/update-data.yml) runs every Monday at 01:00 UTC (02:00 in Spain in winter, 03:00 in summer). It can also be started by hand from the Actions tab. It:
+
+1. Runs the scraper in incremental mode, which also picks up the cycle being played.
+2. Stops if nothing changed on the website (no commit, no deploy).
+3. Otherwise builds and checks the database (`scripts/build-db.sh`), commits the data to `main` and deploys the site.
+
+The run summary lists the rows scraped and any new player names. Check them: if a name is another spelling of an existing player, add an alias to `db-migrations/01-consolidate-players.sql`. If a check fails, the run fails (GitHub emails you) and the published data stays as it was.
+
+Still done by hand: adding a new season (see `data-scraper/README.md`), the Play Off rows of `cycles.csv` and the play-off results.
+
 ## Tech Stack
 
 | Layer | Technology |

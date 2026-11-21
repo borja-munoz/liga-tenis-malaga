@@ -12,7 +12,8 @@ import {
 } from "../lib/matches";
 import { getLastPlayerId, parseId, setLastPlayerId } from "../lib/lastPlayer";
 import { useFitsViewport } from "../lib/layout";
-import { matchesPath, playerPath } from "../routes";
+import { useMe } from "../lib/me";
+import { groupPath, matchesPath, playerPath } from "../routes";
 import CycleChart from "../components/CycleChart";
 import { MatchCard, usePhaseLabel } from "../components/MatchParts";
 
@@ -48,6 +49,7 @@ function PlayerDashboard({ playerId }: { playerId: number }) {
   const { matches, status: matchesStatus } = usePlayerMatches(playerId);
   const { cycles, status: cyclesStatus } = usePlayerCycles(playerId);
   const { current } = useCurrentCycle();
+  const [meId, setMe] = useMe();
 
   useEffect(() => {
     if (player) setLastPlayerId(player.id);
@@ -98,10 +100,13 @@ function PlayerDashboard({ playerId }: { playerId: number }) {
                 {cycleSummary.lastGroup != null && (
                   <>
                     {" · "}
-                    <FormattedMessage
-                      id={isInCurrentCycle ? "player.group" : "player.lastGroup"}
-                      values={{ group: cycleSummary.lastGroup }}
-                    />
+                    {isInCurrentCycle ? (
+                      <Link to={groupPath(cycleSummary.lastGroup)} className="hero__group-link">
+                        <FormattedMessage id="player.group" values={{ group: cycleSummary.lastGroup }} />
+                      </Link>
+                    ) : (
+                      <FormattedMessage id="player.lastGroup" values={{ group: cycleSummary.lastGroup }} />
+                    )}
                   </>
                 )}
               </div>
@@ -118,6 +123,15 @@ function PlayerDashboard({ playerId }: { playerId: number }) {
                   </span>
                 )}
               </div>
+              <button
+                type="button"
+                className={"me-toggle" + (meId === player.id ? " is-active" : "")}
+                aria-pressed={meId === player.id}
+                onClick={() => setMe(meId === player.id ? null : player.id)}
+              >
+                <span aria-hidden="true">{meId === player.id ? "★" : "☆"}</span>
+                <FormattedMessage id={meId === player.id ? "me.isMe" : "me.setMe"} />
+              </button>
             </div>
             <div className="hero__stats">
               <div className="win-ring" style={{ "--pct": `${summary.winRate}%` } as CSSProperties}>
@@ -183,6 +197,9 @@ function PlayerDashboard({ playerId }: { playerId: number }) {
             <Tile center label={intl.formatMessage({ id: "cycles.bestGroup" })} value={cycleSummary.bestGroup ?? "—"} highlight />
             <Tile center label={intl.formatMessage({ id: "cycles.points" })} value={cycleSummary.totalPoints} highlight />
           </div>
+          {cycles && cycles[cycles.length - 1]?.provisional && (
+            <p className="card__hint cycles__note"><FormattedMessage id="cycles.provisionalNote" /></p>
+          )}
         </section>
 
         {/* Recent matches */}

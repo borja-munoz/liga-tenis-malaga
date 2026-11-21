@@ -1,6 +1,10 @@
 import argparse
 import csv
+import datetime
+import difflib
 import os
+import re
+import unicodedata
 import requests
 from bs4 import BeautifulSoup
 
@@ -18,7 +22,16 @@ parser.add_argument(
          'Format SEASON:CYCLE or SEASON:FIRST-LAST, e.g. "9:5-6,10:1". '
          'Existing rows for these cycles are replaced.'
 )
+parser.add_argument(
+    '--report',
+    help='Append a Markdown summary of the run (cycles fetched, new player '
+         'names) to this file, e.g. $GITHUB_STEP_SUMMARY.'
+)
 args = parser.parse_args()
+
+# In incremental mode, cycles that ended this many days ago or less are
+# fetched again, to pick up results entered after the cycle closed
+RESCRAPE_DAYS = 14
 if args.cycles:
     args.mode = 'incremental'
 
@@ -134,6 +147,33 @@ empty_result_cells = 0
 empty_initial_result_columns = 0
 empty_intermediate_result_columns = 0
 
+# Cycle calendar (season, cycle) -> row. Rows for new cycles are added
+# with the dates shown on the cycle page; existing rows are kept as they
+# are (some pages show dates that differ from the real calendar)
+cycles_calendar = {}
+if os.path.exists('cycles.csv'):
+    with open('cycles.csv', 'r', newline='') as f:
+        for row in csv.DictReader(f):
+            cycles_calendar[(int(row['season_id']), int(row['cycle_order']))] = row
+new_cycles = []
+
+def parse_page_date(text):
+    day, month, year = (int(x) for x in text.split('/'))
+    if year < 100:
+        year += 2000
+    return datetime.date(year, month, day)
+
+def page_dates(soup):
+    """Start and end date in the page header, e.g. 'CICLO 2 26/10/26 – 29/11/26'"""
+    match = re.search(r'(\d{1,2}/\d{1,2}/\d{2,4})\s*\S\s*(\d{1,2}/\d{1,2}/\d{2,4})',
+                      soup.get_text(' '))
+    if not match:
+        return None
+    try:
+        return parse_page_date(match.group(1)), parse_page_date(match.group(2))
+    except ValueError:
+        return None
+
 processed_cycles = set()
 cycles_to_fetch = None  # Explicit list of cycles to fetch (--cycles)
 _existing_seasons_players = {}
@@ -158,8 +198,14 @@ if args.mode == 'incremental':
         cycles_to_fetch = parse_cycles(args.cycles)
     elif processed_cycles:
         # The last processed cycle may have been scraped while it was
-        # still being played, so fetch it again with any newer cycles
+        # still being played, so fetch it again with any newer cycles.
+        # Recently finished cycles are fetched again too, as results are
+        # sometimes entered a few days after the cycle ends
         processed_cycles.discard(max(processed_cycles))
+        cutoff = datetime.date.today() - datetime.timedelta(days=RESCRAPE_DAYS)
+        for key, row in cycles_calendar.items():
+            if datetime.date.fromisoformat(row['end_date']) >= cutoff:
+                processed_cycles.discard(key)
 
     if os.path.exists('players.csv'):
         with open('players.csv', 'r', newline='') as f:
@@ -173,6 +219,8 @@ if args.mode == 'incremental':
             for row in reader:
                 sid = int(row['season_id'])
                 _existing_seasons_players.setdefault(sid, set()).add(row['player_name'])
+
+known_players = set(players)
 
 season_index = 1
 for template in template_seasons:
@@ -194,6 +242,26 @@ for template in template_seasons:
     font_elements = soup.select('font')
     if len(font_elements) == 0:
       break
+    if (season_index, cycle_index) not in cycles_calendar:
+      dates = page_dates(soup)
+      if dates is None:
+        # Estimate: cycles last five weeks and start the day after the
+        # previous one ends
+        previous = cycles_calendar.get((season_index, cycle_index - 1))
+        start = (datetime.date.fromisoformat(previous['end_date']) + datetime.timedelta(days=1)
+                 if previous else datetime.date.today())
+        dates = (start, start + datetime.timedelta(days=34))
+        print(f'WARNING season {season_index} cycle {cycle_index}: dates not found '
+              f'in the page, estimated as {dates[0]} - {dates[1]}')
+      row = {
+        'season_id': season_index,
+        'cycle_order': cycle_index,
+        'name': f'Ciclo {cycle_index}',
+        'start_date': dates[0].isoformat(),
+        'end_date': dates[1].isoformat(),
+      }
+      cycles_calendar[(season_index, cycle_index)] = row
+      new_cycles.append(row)
     player_row = False
     results_table = False
     standings = {}
@@ -458,6 +526,55 @@ with open('results.csv', 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(all_results)
+
+# The Play Off rows are added by hand, so they are kept as they are
+with open('cycles.csv', 'w', newline='') as csvfile:
+    fieldnames = ['season_id', 'cycle_order', 'name', 'start_date', 'end_date']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
+    writer.writeheader()
+    writer.writerows(cycles_calendar[k] for k in sorted(cycles_calendar))
+
+def normalize_name(name):
+    name = unicodedata.normalize('NFKD', name.strip().lower())
+    return ''.join(c for c in name if not unicodedata.combining(c))
+
+def write_report(path):
+    new_players = sorted(p for p in players if p not in known_players and len(p) > 2)
+    by_normalized = {}
+    for p in known_players:
+        by_normalized.setdefault(normalize_name(p), []).append(p)
+    lines = ['## Data scraped', '']
+    lines.append('| Cycle | Standings rows | Results |')
+    lines.append('|---|---|---|')
+    for key in sorted(fetched_cycles, key=lambda k: cycle_key(*k)):
+        season, cycle = cycle_key(*key)
+        standings_rows = sum(1 for r in new_standings if (r[0], r[1]) == (season, cycle))
+        result_rows = sum(1 for r in results if (r['season'], r['cycle']) == (season, cycle))
+        lines.append(f'| Season {season} · Cycle {cycle} | {standings_rows} | {result_rows} |')
+    lines.append('')
+    for row in new_cycles:
+        lines.append(f"New cycle: season {row['season_id']} {row['name']} "
+                     f"({row['start_date']} – {row['end_date']})")
+    if new_cycles:
+        lines.append('')
+    if new_players:
+        lines.append('### New player names')
+        lines.append('')
+        lines.append('Check whether any of them is another spelling of an existing '
+                     'player, and if so add it to `db-migrations/01-consolidate-players.sql`.')
+        lines.append('')
+        for p in new_players:
+            similar = difflib.get_close_matches(normalize_name(p), by_normalized.keys(), n=3, cutoff=0.8)
+            names = [n for key in similar for n in by_normalized[key]]
+            hint = f" — similar to {', '.join(names)}" if names else ''
+            lines.append(f'- {p}{hint}')
+    else:
+        lines.append('No new player names.')
+    with open(path, 'a') as f:
+        f.write('\n'.join(lines) + '\n')
+
+if args.report:
+    write_report(args.report)
 
 print('Data Extracted')
 # print(f'Players: {len(players)}')

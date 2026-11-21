@@ -33,17 +33,23 @@ python extract-data-playoffs.py
 
 ### Updating with new cycles
 
+The GitHub Action `.github/workflows/update-data.yml` does this every Monday (see the main README). By hand:
+
 `extract-data-cycles.py` has three modes:
 
 | Command | Behaviour |
 |---|---|
 | `python extract-data-cycles.py` | Full mode: re-scrapes every season and overwrites all output files (including `standings.csv`, losing manual corrections). |
-| `python extract-data-cycles.py --mode incremental` | Re-scrapes the last cycle already present in `results.csv` (it may have been scraped while still in progress) plus any newer cycles. |
+| `python extract-data-cycles.py --mode incremental` | Re-scrapes the last cycle already present in `results.csv` (it may have been scraped while still in progress), any cycle that ended in the last 14 days (results are sometimes entered late) and any newer cycles. |
 | `python extract-data-cycles.py --cycles 9:5-6,10:1` | Re-scrapes only the listed cycles (`SEASON:CYCLE` or `SEASON:FIRST-LAST`). |
 
-In both incremental variants, the rows for the re-scraped cycles in `results.csv` and `standings.csv` are **replaced**. Rows for every other cycle are kept untouched, including manual corrections. Use `--cycles` to leave out a cycle that is still being played.
+In both incremental variants, the rows for the re-scraped cycles in `results.csv` and `standings.csv` are **replaced**. Rows for every other cycle are kept untouched, including manual corrections. The cycle still being played is scraped like any other: the app shows its standings as provisional.
 
-To add a new season, append its URL to `template_seasons` and its column layout to `column_order`. For playoffs, append the URL to `playoff_urls` in `extract-data-playoffs.py`.
+`--report FILE` appends a Markdown summary to `FILE`: rows scraped per cycle, new cycles and new player names, with similar existing names. Check those names: if one is another spelling of an existing player, add it to `db-migrations/01-consolidate-players.sql`.
+
+When the scraper finds a cycle that is not in `cycles.csv`, it adds it with the dates shown on the cycle page (e.g. `CICLO 2 26/10/26 – 29/11/26`). Existing rows are never changed, and the Play Off rows are added by hand.
+
+To add a new season, append its URL to `template_seasons` and its column layout to `column_order`, and add the season to `db-migrations/00-create-base-tables-up.sql`. For playoffs, append the URL to `playoff_urls` in `extract-data-playoffs.py`.
 
 `extract-data-playoffs.py` always rewrites its three CSV files from scratch. The committed `results-playoff.csv` contains manual corrections and has no seasons 1–3, which the parser cannot read. So run it in a temporary directory and append only the new seasons' rows to the committed files.
 
@@ -56,8 +62,10 @@ To add a new season, append its URL to `template_seasons` and its column layout 
 | `players.csv` | Unique player names found across all seasons and cycles |
 | `seasons_players.csv` | Season–player enrollment (which players appeared in each season) |
 | `results.csv` | Match results for regular cycles |
+| `standings.csv` | Standings of every group in every cycle |
+| `cycles.csv` | Cycle calendar: season, cycle, name, start and end date |
 
-`standings.csv` (cycle standings) is **not** written automatically. The relevant code is commented out because the output requires manual corrections to account for parsing inconsistencies in the source HTML. The file must be produced and curated manually.
+Some rows of older seasons in `standings.csv` were corrected by hand (the source HTML has errors there). Incremental runs keep them.
 
 ### Produced by `extract-data-playoffs.py`
 
@@ -86,6 +94,5 @@ Each result cell may contain:
 
 ## Notes
 
-- The `standings.csv` file is excluded from automatic generation because the HTML structure varies across seasons and some pages contain errors. It is maintained manually.
 - The scraper includes a special-case fix for a player name (`Álvaro Lara Federico Bernard`) that caused row detection to fail.
 - Column order in the standings table changed across seasons (Seasons 1, 2–3, 4–6, and 7–10 each have a different column layout). The scraper handles this with per-season column maps.

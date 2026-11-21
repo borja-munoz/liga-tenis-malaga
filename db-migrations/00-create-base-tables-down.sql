@@ -1,3 +1,4 @@
+DROP TABLE metadata;
 DROP TABLE results_playoffs;
 DROP TABLE results_cycles;
 DROP TABLE clubs;

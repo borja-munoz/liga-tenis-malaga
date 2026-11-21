@@ -1,0 +1,88 @@
+# Weekly data update: scrapes the league website, rebuilds the database and,
+# only when the scraped data changed, commits it to main and deploys the site.
+name: Update data
+
+on:
+  schedule:
+    # Mondays at 01:00 UTC: 02:00 in Spain in winter, 03:00 in summer
+    - cron: '0 1 * * 1'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Never run two updates at the same time
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+env:
+  # Same version as the one used to build the database locally. New files
+  # use storage version v1.0.0, which the web app's DuckDB-Wasm can read.
+  DUCKDB_VERSION: '1.5.1'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: data-scraper/requirements.txt
+      - name: Install scraper dependencies
+        run: pip install -r data-scraper/requirements.txt
+      - name: Scrape new results
+        working-directory: data-scraper
+        run: python extract-data-cycles.py --mode incremental --report "$GITHUB_STEP_SUMMARY"
+      - name: Detect changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain -- data-scraper)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat -- data-scraper
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "**No changes on the website since the last update. Nothing was committed.**" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Install DuckDB CLI
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/duckdb.zip" \
+            "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/duckdb_cli-linux-amd64.zip"
+          unzip -q "$RUNNER_TEMP/duckdb.zip" -d "$RUNNER_TEMP/duckdb"
+          echo "$RUNNER_TEMP/duckdb" >> "$GITHUB_PATH"
+      - name: Build and check the database
+        if: steps.changes.outputs.changed == 'true'
+        run: ./scripts/build-db.sh
+      - name: Commit and push
+        id: commit
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          latest=$(tail -n 1 data-scraper/standings.csv | awk -F, '{ print $1 " cycle " $2 }')
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data-scraper web-app/public/db
+          git commit -m "Update data to season ${latest} ($(date -u +%Y-%m-%d))"
+          git push origin HEAD:main
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "Committed $(git rev-parse --short HEAD)." >> "$GITHUB_STEP_SUMMARY"
+
+  # Pushes made with the workflow token don't trigger other workflows,
+  # so the deployment is called from here
+  deploy:
+    needs: update
+    if: needs.update.outputs.changed == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/main.yml
+    with:
+      ref: ${{ needs.update.outputs.sha }}
