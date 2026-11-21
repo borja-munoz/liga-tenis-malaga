@@ -1349,34 +1349,43 @@ button {
 /* Mobile: one column (hero, standings, played, pending). Desktop: 2 × 2 grid */
 .home-grid { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
 .standings-head { display: flex; flex-direction: column; }
+/* Desktop: the cycle as a strip on top; standings and pending matches in a
+   narrow column on the left; the group matches fill the rest, 2 per row */
 @media (min-width: 900px) {
   .home-grid {
     gap: 24px;
-    grid-template-columns: minmax(0, 32%) minmax(0, 1fr);
-    grid-template-areas: "hero standings" "results pending";
+    grid-template-columns: minmax(0, clamp(340px, 40%, 620px)) minmax(0, 1fr);
+    grid-template-areas: "hero hero" "standings results" "pending results";
+    grid-template-rows: auto auto 1fr;
   }
   .home-grid > .cycle-hero { grid-area: hero; height: auto; }
   .home-grid > .standings-card { grid-area: standings; }
   .home-grid > .results-card { grid-area: results; }
   .home-grid > .pending-card { grid-area: pending; }
+
+  .cycle-hero { flex-direction: row; align-items: center; justify-content: space-between; gap: 32px; }
+  .cycle-hero__title { font-size: 28px; }
+  .cycle-hero__progress { flex: 0 1 520px; }
+
   .standings-head { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
   .standings-head .group-nav { justify-content: flex-start; margin: 0; }
   .standings-head .group-nav__title { min-width: 96px; }
-  .standings-head .group-tools { flex: 1 1 280px; justify-content: flex-end; margin: 0; }
-  .standings-head .group-tools__search { flex: 0 1 340px; }
-  .results-card .group-results { grid-template-columns: minmax(0, 1fr); }
+  .standings-head .group-tools { flex: 1 1 200px; justify-content: flex-end; margin: 0; }
+  .standings-head .group-tools__search { flex: 1 1 200px; max-width: 340px; }
+  .results-card .group-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pending-card .pending-list { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---------- Desktop fit: current cycle and player hero ---------- */
 @media (min-width: 900px) and (min-height: 600px) {
-  /* Current cycle: the top row takes what the hero and the standings need
-     (up to the space available, then the standings scroll); the bottom row
-     takes the rest and its lists scroll inside their cards */
+  /* Current cycle: the strip takes its height, the standings what they
+     need (up to the space available, then they scroll), and the pending
+     and played lists the rest, scrolling inside their cards */
   .page--home .home-grid {
     flex: 1 1 0;
     min-height: 0;
     gap: var(--fit-gap);
-    grid-template-rows: minmax(0, max-content) minmax(clamp(120px, 24vh, 240px), 1fr);
+    grid-template-rows: auto minmax(0, max-content) minmax(clamp(90px, 16vh, 200px), 1fr);
   }
   .page--home .home-grid > * { min-height: 0; box-sizing: border-box; }
   .page--home .me-prompt { padding-top: clamp(10px, 1.6vh, 20px); padding-bottom: clamp(10px, 1.6vh, 20px); }
@@ -1387,8 +1396,8 @@ button {
   .page--home .standings td { padding-top: clamp(4px, 1vh, 10px); padding-bottom: clamp(4px, 1vh, 10px); }
   .page--home .standings th { padding-bottom: clamp(4px, 0.8vh, 8px); }
   .page--home .standings__note { margin-top: clamp(4px, 1vh, 10px); }
-  .page--home .cycle-hero { overflow: hidden; padding: clamp(16px, 2.6vh, 28px); gap: clamp(8px, 1.6vh, 18px); }
-  .page--home .cycle-hero__title { font-size: clamp(22px, 3.8vh, 34px); margin: clamp(2px, 0.6vh, 6px) 0 clamp(4px, 0.8vh, 8px); }
+  .page--home .cycle-hero { padding: clamp(12px, 2vh, 22px) clamp(20px, 2vw, 28px); }
+  .page--home .cycle-hero__title { font-size: clamp(20px, 3vh, 28px); margin: clamp(2px, 0.4vh, 4px) 0; }
   .page--home .results-card,
   .page--home .pending-card { display: flex; flex-direction: column; overflow: hidden; gap: clamp(8px, 1.4vh, 12px); }
 
