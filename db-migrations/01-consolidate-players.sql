@@ -70,6 +70,8 @@ INSERT INTO player_aliases (alias, canonical) VALUES
   ('Joaquin Almagro', 'Joaquín Almagro'),
   -- Joaquín Guerrero
   ('Joaquin Guerrero', 'Joaquín Guerrero'),
+  -- Jonas Jones (also listed with another surname in play-offs)
+  ('Jonas Valintin', 'Jonas Jones'),
   -- Jorge Gálvez
   ('Jorge Galvez', 'Jorge Gálvez'),
   -- Jorge Martín
