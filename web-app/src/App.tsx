@@ -3,7 +3,7 @@ import { useRoutes } from "react-router-dom";
 import routes from "./routes";
 import { AppContext, DEFAULT_APP_CONTEXT } from "./context";
 
-import { ThemeProvider } from "@emotion/react";
+import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import theme from "./theme";
 
@@ -13,7 +13,15 @@ import { messages } from "./i18n/messages";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { loadDB } from "./db/duckdb";
 import LoadingMessage from "./components/LoadingMessage";
-const queryClient = new QueryClient();
+import UpdatePrompt from "./components/UpdatePrompt";
+// Queries run against DuckDB in the browser, not the network: don't pause
+// them when the device goes offline (the default "online" network mode does)
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { networkMode: "always" },
+    mutations: { networkMode: "always" },
+  },
+});
 
 function App() {
   const routing = useRoutes(routes);
@@ -41,10 +49,11 @@ function App() {
           >
             <CssBaseline />
             {dbInitialized ? (
-              <Suspense fallback={<div>...</div>}>{routing}</Suspense>
+              <Suspense fallback={<LoadingMessage />}>{routing}</Suspense>
             ) : (
               <LoadingMessage />
             )}
+            <UpdatePrompt />
           </IntlProvider>
         </QueryClientProvider>
       </ThemeProvider>

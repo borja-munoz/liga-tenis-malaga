@@ -19,15 +19,21 @@ const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
 };
 
 let db : AsyncDuckDB | null = null;
+let selectedBundle: duckdb.DuckDBBundle | null = null;
 let connection: AsyncDuckDBConnection | undefined; 
 
-const initDB = async () => {
-  if (db) {
-    return db; // Return existing database, if any
-  }
+let initPromise: Promise<AsyncDuckDB> | null = null;
 
+// Memoized so concurrent callers share one instance
+const initDB = () => {
+  initPromise ??= createDB();
+  return initPromise;
+};
+
+const createDB = async () => {
   // Select a bundle based on browser checks
   const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
+  selectedBundle = bundle;
 
   // Instantiate the asynchronus version of DuckDB-wasm
   const worker = new Worker(bundle.mainWorker!);
@@ -40,7 +46,9 @@ const initDB = async () => {
 
 const loadDB = async () => {
   const db = await initDB();
-  const dbPath = "https://borja-munoz.github.io/liga-tenis-malaga/db/liga_tenis_malaga.duckdb";
+  // Same origin as the app (and absolute: DuckDB fetches it from its worker),
+  // so the service worker can serve it from the cache
+  const dbPath = new URL(`${import.meta.env.BASE_URL}db/liga_tenis_malaga.duckdb`, window.location.origin).href;
   await db.open({ 
     accessMode: DuckDBAccessMode.READ_ONLY,
     path: dbPath
@@ -61,4 +69,10 @@ const executeQuery = async (query: string) => {
   return results;
 }
 
-export { executeQuery, loadDB };
+/** Engine files in use, so the service worker can keep them for offline use */
+const getEngineUrls = async (): Promise<string[]> => {
+  await initDB();
+  return selectedBundle ? [selectedBundle.mainModule, selectedBundle.mainWorker].filter((u): u is string => !!u) : [];
+};
+
+export { executeQuery, getEngineUrls, loadDB };

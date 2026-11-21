@@ -1,8 +1,20 @@
 import { useRef, useEffect } from "react";
-import { init, getInstanceByDom } from "echarts";
+import { init, getInstanceByDom, use } from "echarts/core";
+import { LineChart } from "echarts/charts";
+import {
+  AriaComponent,
+  GridComponent,
+  MarkLineComponent,
+  TooltipComponent,
+} from "echarts/components";
+import { CanvasRenderer } from "echarts/renderers";
 import type { CSSProperties } from "react";
-import type { EChartsOption, ECharts, SetOptionOpts } from "echarts";
+import type { EChartsOption } from "echarts";
+import type { EChartsType as ECharts, SetOptionOpts } from "echarts/core";
 import { Box } from "@mui/material";
+
+// Register only what the app uses (keeps the bundle small for the PWA)
+use([LineChart, GridComponent, TooltipComponent, MarkLineComponent, AriaComponent, CanvasRenderer]);
 
 export interface ReactEChartsProps {
   option: EChartsOption;
@@ -28,17 +40,27 @@ export default function ReactECharts({
       chart = init(chartRef.current, theme);
     }
 
-    // Add chart resize listener
-    // ResizeObserver is leading to a bit janky UX
+    // Resize with the container (layout changes, not only window resizes).
+    // Batched in requestAnimationFrame to avoid janky repeated resizes.
+    let frame = 0;
     function resizeChart() {
-      chart?.resize();
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => chart?.resize());
     }
-    window.addEventListener("resize", resizeChart);
+    const observer =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(resizeChart) : null;
+    if (observer && chartRef.current) {
+      observer.observe(chartRef.current);
+    } else {
+      window.addEventListener("resize", resizeChart);
+    }
 
     // Return cleanup function
     return () => {
-      chart?.dispose();
+      cancelAnimationFrame(frame);
+      observer?.disconnect();
       window.removeEventListener("resize", resizeChart);
+      chart?.dispose();
     };
   }, [theme]);
 

@@ -1,10 +1,11 @@
-import { Box } from "@mui/material";
 import imgUrl from '/tennis-ball.svg';
 
 export default function LoadingMessage() {
   return (
-    <Box
-      sx={{
+    <div
+      role="status"
+      aria-label="Cargando"
+      style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -12,13 +13,10 @@ export default function LoadingMessage() {
         minHeight: "100vh",
       }}
     >
-      <div 
+      <div
         className="zoom-in-out-box"
-        style={{
-          backgroundImage: `url("${imgUrl}")`
-        }}
-      >
-      </div>
-    </Box>
+        style={{ backgroundImage: `url("${imgUrl}")` }}
+      />
+    </div>
   );
 }
