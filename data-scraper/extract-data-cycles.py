@@ -9,9 +9,27 @@ parser.add_argument(
     '--mode',
     choices=['full', 'incremental'],
     default='full',
-    help='full: reprocess everything (default). incremental: only fetch new cycles.'
+    help='full: reprocess everything (default). incremental: re-fetch the last '
+         'processed cycle (it may have been incomplete) and any newer ones.'
+)
+parser.add_argument(
+    '--cycles',
+    help='Comma-separated list of cycles to (re)fetch; implies incremental mode. '
+         'Format SEASON:CYCLE or SEASON:FIRST-LAST, e.g. "9:5-6,10:1". '
+         'Existing rows for these cycles are replaced.'
 )
 args = parser.parse_args()
+if args.cycles:
+    args.mode = 'incremental'
+
+def parse_cycles(spec):
+    cycles = set()
+    for item in spec.split(','):
+        season, cycle_range = item.strip().split(':')
+        first, _, last = cycle_range.partition('-')
+        for c in range(int(first), int(last or first) + 1):
+            cycles.add((int(season), c))
+    return cycles
 
 template_seasons = [
   'http://www.tenismalaga.es/Ciclo{cycle}.html',
@@ -22,7 +40,8 @@ template_seasons = [
   'http://www.tenismalaga.es/temporada6/Ciclo{cycle}/Ciclo{cycle}.html',
   'http://www.tenismalaga.es/temporada7/Ciclo{cycle}/Ciclo{cycle}.html',
   'http://www.tenismalaga.es/temporada8/Ciclo{cycle}/Ciclo{cycle}.html',
-  'http://www.tenismalaga.es/temporada9/Ciclo{cycle}/Ciclo{cycle}.html'
+  'http://www.tenismalaga.es/temporada9/Ciclo{cycle}/Ciclo{cycle}.html',
+  'http://www.tenismalaga.es/temporada10/Ciclo{cycle}/Ciclo{cycle}.html'
 ];
 
 column_order_seasons_1 = [
@@ -73,7 +92,7 @@ column_order_seasons_4_6 = [
   'Puntos total'
 ]
 
-column_order_seasons_7_9 = [
+column_order_seasons_7_10 = [
   'Puesto',
   'Grupo Destino',
   'Jugador',
@@ -96,9 +115,10 @@ column_order = [
   column_order_seasons_4_6,
   column_order_seasons_4_6,
   column_order_seasons_4_6,
-  column_order_seasons_7_9,
-  column_order_seasons_7_9,
-  column_order_seasons_7_9
+  column_order_seasons_7_10,
+  column_order_seasons_7_10,
+  column_order_seasons_7_10,
+  column_order_seasons_7_10
 ]
 
 players = set()
@@ -115,7 +135,10 @@ empty_initial_result_columns = 0
 empty_intermediate_result_columns = 0
 
 processed_cycles = set()
+cycles_to_fetch = None  # Explicit list of cycles to fetch (--cycles)
 _existing_seasons_players = {}
+_existing_results = []
+_existing_standings = []
 
 if args.mode == 'incremental':
     if os.path.exists('results.csv'):
@@ -123,6 +146,20 @@ if args.mode == 'incremental':
             reader = csv.DictReader(f)
             for row in reader:
                 processed_cycles.add((int(row['season']), int(row['cycle'])))
+                _existing_results.append(row)
+
+    if os.path.exists('standings.csv'):
+        with open('standings.csv', 'r', newline='') as f:
+            reader = csv.reader(f)
+            next(reader)  # Header
+            _existing_standings = list(reader)
+
+    if args.cycles:
+        cycles_to_fetch = parse_cycles(args.cycles)
+    elif processed_cycles:
+        # The last processed cycle may have been scraped while it was
+        # still being played, so fetch it again with any newer cycles
+        processed_cycles.discard(max(processed_cycles))
 
     if os.path.exists('players.csv'):
         with open('players.csv', 'r', newline='') as f:
@@ -146,7 +183,10 @@ for template in template_seasons:
     )
   cycle_data.append([[] for _ in range(7)])
   for cycle_index in range(1, 8):
-    if args.mode == 'incremental' and (season_index, cycle_index) in processed_cycles:
+    if cycles_to_fetch is not None:
+      if (season_index, cycle_index) not in cycles_to_fetch:
+        continue
+    elif args.mode == 'incremental' and (season_index, cycle_index) in processed_cycles:
       continue
     page = requests.get(template.format(cycle=cycle_index))
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -208,6 +248,22 @@ for template in template_seasons:
           results_players.append(fe.text)
         elif fe.text in results_players: # Start of player row
           results_table_row = results_players.index(fe.text)
+          results_table_column = 0
+          results_cells = True
+          empty_result_cells = 0
+        elif (results_table_row + 1 < len(results_players) and
+              '-' not in fe.text and
+              fe.text in [p['Jugador'] for p in
+                          cycle_data[season_index - 1][cycle_index - 1][group_index - 1]]):
+          # Row label that does not match the header of the results matrix
+          # (the web page uses a different player name in the header).
+          # Trust the standings name and treat it as the next row.
+          results_table_row += 1
+          print(f'WARNING season {season_index} cycle {cycle_index} '
+                f'group {group_index}: results header name '
+                f'"{results_players[results_table_row]}" replaced by row '
+                f'label "{fe.text}"')
+          results_players[results_table_row] = fe.text
           results_table_column = 0
           results_cells = True
           empty_result_cells = 0
@@ -292,77 +348,101 @@ with open('players.csv', 'w', newline='') as csvfile:
 with open('seasons_players.csv', 'w', newline='') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',')
     spamwriter.writerow(['season_id', 'player_name'])
-    for season_index in range(1, 9):
+    for season_index in range(1, len(template_seasons) + 1):
       players_ordered = sorted(seasons_players[season_index - 1])
       for player in players_ordered:
         if len(player) > 2:
           spamwriter.writerow([season_index, player])
 
-# Avoid writing the standings file because it requires manual
-# editing to account for errors in the web page text and
-# the parser
-standings_write_mode = 'w' if args.mode == 'full' else 'a'
-write_standings_header = args.mode == 'full' or not os.path.exists('standings.csv')
+# Cycles fetched in this run. In incremental mode their previous rows
+# are replaced; rows for every other cycle are kept untouched (including
+# any manual corrections made to standings.csv).
+fetched_cycles = set(
+  (season_index + 1, cycle_index + 1)
+  for season_index in range(len(cycle_data))
+  for cycle_index in range(len(cycle_data[season_index]))
+  if len(cycle_data[season_index][cycle_index]) > 0
+)
+fetched_cycles.update((r['season'], r['cycle']) for r in results)
 
-with open('standings.csv', standings_write_mode, newline='') as csvfile:
+def cycle_key(season, cycle):
+  return (int(season), int(cycle))
+
+# The standings may need manual editing to account for errors in the
+# web page text and the parser, so review the new cycles after a run
+if args.mode == 'incremental':
+  kept_standings = [r for r in _existing_standings
+                    if cycle_key(r[0], r[1]) not in fetched_cycles]
+  kept_results = [r for r in _existing_results
+                  if cycle_key(r['season'], r['cycle']) not in fetched_cycles]
+else:
+  kept_standings = []
+  kept_results = []
+
+new_standings = []
+for season_index in range(1, len(template_seasons) + 1):
+  for cycle_index in range(0, 7):
+    if len(cycle_data[season_index - 1][cycle_index]) == 0:
+      continue
+    for group_index in range(0, len(cycle_data[season_index - 1][cycle_index])):
+      for player_index in range(0, len(cycle_data[season_index - 1][cycle_index][group_index])):
+        player_data = cycle_data[season_index - 1][cycle_index][group_index][player_index]
+        new_standings.append([
+          season_index,
+          cycle_index + 1,
+          group_index + 1,
+          player_data['Puesto'],
+          player_data.get('Grupo Destino') or '',
+          player_data['Jugador'],
+          player_data['Puntos'],
+          player_data['Ganados'],
+          player_data['Perdidos'],
+          player_data['No Jugados'],
+          player_data['Sets Ganados'],
+          player_data['Sets Perdidos'],
+          player_data['Balance Sets'],
+          player_data.get('Juegos Ganados') or '',
+          player_data.get('Juegos Perdidos') or '',
+          player_data.get('Balance Juegos') or '',
+          player_data['Puntos por puesto'],
+          player_data['Puntos extra'],
+          player_data['Puntos total']
+        ])
+
+# Stable sort keeps the original row order within each cycle
+all_standings = sorted(kept_standings + new_standings,
+                       key=lambda r: cycle_key(r[0], r[1]))
+all_results = sorted(kept_results + results,
+                     key=lambda r: cycle_key(r['season'], r['cycle']))
+
+with open('standings.csv', 'w', newline='') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',')
-    if write_standings_header:
-      spamwriter.writerow([
-        'season_id',
-        'cycle_id',
-        'group',
-        'Puesto',
-        'Grupo Destino',
-        'Jugador',
-        'Puntos',
-        'Ganados',
-        'Perdidos',
-        'No Jugados',
-        'Sets Ganados',
-        'Sets Perdidos',
-        'Balance Sets',
-        'Juegos Ganados',
-        'Juegos Perdidos',
-        'Balance Juegos',
-        'Puntos por puesto',
-        'Puntos extra',
-        'Puntos total'
-      ])
-    for season_index in range(1, 9):
-      for cycle_index in range(0, 7):
-        if len(cycle_data[season_index - 1][cycle_index]) == 0:
-          continue
-        for group_index in range(0, len(cycle_data[season_index - 1][cycle_index])):
-          for player_index in range(0, len(cycle_data[season_index - 1][cycle_index][group_index])):
-            player_data = cycle_data[season_index - 1][cycle_index][group_index][player_index]
-            spamwriter.writerow([
-              season_index,
-              cycle_index + 1,
-              group_index + 1,
-              player_data['Puesto'],
-              player_data.get('Grupo Destino') or '',
-              player_data['Jugador'],
-              player_data['Puntos'],
-              player_data['Ganados'],
-              player_data['Perdidos'],
-              player_data['No Jugados'],
-              player_data['Sets Ganados'],
-              player_data['Sets Perdidos'],
-              player_data['Balance Sets'],
-              player_data.get('Juegos Ganados') or '',
-              player_data.get('Juegos Perdidos') or '',
-              player_data.get('Balance Juegos') or '',
-              player_data['Puntos por puesto'],
-              player_data['Puntos extra'],
-              player_data['Puntos total']
-            ])
+    spamwriter.writerow([
+      'season_id',
+      'cycle_id',
+      'group',
+      'Puesto',
+      'Grupo Destino',
+      'Jugador',
+      'Puntos',
+      'Ganados',
+      'Perdidos',
+      'No Jugados',
+      'Sets Ganados',
+      'Sets Perdidos',
+      'Balance Sets',
+      'Juegos Ganados',
+      'Juegos Perdidos',
+      'Balance Juegos',
+      'Puntos por puesto',
+      'Puntos extra',
+      'Puntos total'
+    ])
+    spamwriter.writerows(all_standings)
 
-results_write_mode = 'w' if args.mode == 'full' else 'a'
-write_header = args.mode == 'full' or not os.path.exists('results.csv')
-
-with open('results.csv', results_write_mode, newline='') as csvfile:
+with open('results.csv', 'w', newline='') as csvfile:
     fieldnames = [
-      'season', 
+      'season',
       'cycle',
       'group_number',
       'player_a',
@@ -376,10 +456,8 @@ with open('results.csv', results_write_mode, newline='') as csvfile:
       'retired_player'
     ]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    if write_header:
-      writer.writeheader()
-    for result in results:
-      writer.writerow(result)
+    writer.writeheader()
+    writer.writerows(all_results)
 
 print('Data Extracted')
 # print(f'Players: {len(players)}')

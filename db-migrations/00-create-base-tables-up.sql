@@ -101,9 +101,21 @@ INSERT INTO seasons (
   end_date
 )
 VALUES (
-  'Temporada 9', 
+  'Temporada 9',
   DATE '2025-09-22',
   DATE '2026-06-07'
+);
+
+-- End date is an estimate until the season calendar is complete
+INSERT INTO seasons (
+  name,
+  start_date,
+  end_date
+)
+VALUES (
+  'Temporada 10',
+  DATE '2026-09-21',
+  DATE '2027-06-06'
 );
 
 CREATE SEQUENCE seq_cycle_id START 1;
@@ -1180,6 +1192,26 @@ VALUES
   'Play Off',
   DATE '2026-05-04',
   DATE '2026-06-07'
+);
+
+-------------------------------
+-- Season 10
+-------------------------------
+INSERT INTO cycles
+(
+  season_id,
+  cycle_order,
+  name,
+  start_date,
+  end_date
+)
+VALUES
+(
+  10,
+  1,
+  'Ciclo 1',
+  DATE '2026-09-21',
+  DATE '2026-10-25'
 );
 
 CREATE SEQUENCE seq_player_id START 1;

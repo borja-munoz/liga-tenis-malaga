@@ -12,8 +12,23 @@ SQL scripts that create the DuckDB schema and populate it from the CSV files pro
 Execute the script from the repository root so that the relative paths to the CSV files resolve correctly:
 
 ```bash
-duckdb public/db/liga_tenis_malaga.duckdb < db-migrations/00-create-base-tables-up.sql
+rm -f /tmp/stage.duckdb
+duckdb /tmp/stage.duckdb < db-migrations/00-create-base-tables-up.sql
+duckdb /tmp/stage.duckdb < db-migrations/01-consolidate-players.sql
 ```
+
+`01-consolidate-players.sql` merges player records that belong to the same person, matching them **by name** (player ids shift whenever new players are scraped). To merge more players, add `(alias, canonical)` rows to its `player_aliases` table. The script fails if a name in that table does not exist.
+
+The updates in the consolidation step leave free space in the file, so export and re-import it into a compact copy before publishing. Close every connection to the database before copying it, or DuckDB-Wasm will look for a `.wal` file:
+
+```bash
+rm -rf /tmp/stage-export
+duckdb /tmp/stage.duckdb -readonly -c "EXPORT DATABASE '/tmp/stage-export' (FORMAT parquet);"
+rm -f web-app/public/db/liga_tenis_malaga.duckdb
+duckdb web-app/public/db/liga_tenis_malaga.duckdb -c "IMPORT DATABASE '/tmp/stage-export';"
+```
+
+The web app uses DuckDB-Wasm 1.29 (DuckDB 1.1), so the file must use storage version `v1.0.0`, which is the default for newly created databases.
 
 The resulting `.duckdb` file is placed in `web-app/public/db/` so that it is included in the Vite build and served by GitHub Pages.
 
@@ -44,7 +59,7 @@ One row per league season.
 | start_date | DATE | Season start date |
 | end_date | DATE | Season end date |
 
-8 seasons are defined, from 2017-10-10 to 2025-06-01.
+10 seasons are defined, from 2017-10-10 to the current season (2026–27). Season 10 only has the cycles completed so far.
 
 ---
 

@@ -9,7 +9,9 @@ playoff_urls = [
   'http://www.tenismalaga.es/temporada4/playoff/playofftemporada4.html',
   'http://www.tenismalaga.es/temporada5/playoff/playofftemporada5.html',
   'http://www.tenismalaga.es/temporada6/playoff/playofftemporada6.html',
-  'http://www.tenismalaga.es/temporada7/playoff/playofftemporada7.html'
+  'http://www.tenismalaga.es/temporada7/playoff/playofftemporada7.html',
+  'http://www.tenismalaga.es/temporada8/playoff/playofftemporada8.html',
+  'http://www.tenismalaga.es/temporada9/playoff/playofftemporada9.html'
 ];
 
 players = set()

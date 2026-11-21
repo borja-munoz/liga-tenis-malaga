@@ -31,6 +31,22 @@ python extract-data-cycles.py
 python extract-data-playoffs.py
 ```
 
+### Updating with new cycles
+
+`extract-data-cycles.py` has three modes:
+
+| Command | Behaviour |
+|---|---|
+| `python extract-data-cycles.py` | Full mode: re-scrapes every season and overwrites all output files (including `standings.csv`, losing manual corrections). |
+| `python extract-data-cycles.py --mode incremental` | Re-scrapes the last cycle already present in `results.csv` (it may have been scraped while still in progress) plus any newer cycles. |
+| `python extract-data-cycles.py --cycles 9:5-6,10:1` | Re-scrapes only the listed cycles (`SEASON:CYCLE` or `SEASON:FIRST-LAST`). |
+
+In both incremental variants, the rows for the re-scraped cycles in `results.csv` and `standings.csv` are **replaced**. Rows for every other cycle are kept untouched, including manual corrections. Use `--cycles` to leave out a cycle that is still being played.
+
+To add a new season, append its URL to `template_seasons` and its column layout to `column_order`. For playoffs, append the URL to `playoff_urls` in `extract-data-playoffs.py`.
+
+`extract-data-playoffs.py` always rewrites its three CSV files from scratch. The committed `results-playoff.csv` contains manual corrections and has no seasons 1–3, which the parser cannot read. So run it in a temporary directory and append only the new seasons' rows to the committed files.
+
 ## Output Files
 
 ### Produced by `extract-data-cycles.py`
@@ -53,7 +69,7 @@ python extract-data-playoffs.py
 
 ## How It Works
 
-The scraper iterates over all 8 seasons and up to 7 cycles per season, fetching each page from `tenismalaga.es`. It uses BeautifulSoup to parse `<font>` elements, which carry the standings tables and result matrices in the source HTML.
+The scraper iterates over all seasons (currently 10) and up to 7 cycles per season, fetching each page from `tenismalaga.es`. It uses BeautifulSoup to parse `<font>` elements, which carry the standings tables and result matrices in the source HTML.
 
 For each cycle page the scraper extracts:
 
@@ -72,4 +88,4 @@ Each result cell may contain:
 
 - The `standings.csv` file is excluded from automatic generation because the HTML structure varies across seasons and some pages contain errors. It is maintained manually.
 - The scraper includes a special-case fix for a player name (`Álvaro Lara Federico Bernard`) that caused row detection to fail.
-- Column order in the standings table changed across seasons (Seasons 1, 2–3, 4–6, and 7–8 each have a different column layout). The scraper handles this with per-season column maps.
+- Column order in the standings table changed across seasons (Seasons 1, 2–3, 4–6, and 7–10 each have a different column layout). The scraper handles this with per-season column maps.

@@ -1,6 +1,6 @@
 # Liga Tenis Málaga
 
-Web application to explore statistics and match history for a regional tennis league in Málaga, Spain, covering 8 seasons from 2017 to 2025.
+Web application to explore statistics and match history for a regional tennis league in Málaga, Spain, covering 10 seasons from 2017 to the current 2026–27 season.
 
 ## Live Demo
 
@@ -65,7 +65,7 @@ See [web-app/README.md](web-app/README.md) for details.
 
 ## League Structure
 
-- **8 seasons** — October to June, from 2017–18 to 2024–25
+- **10 seasons** — September/October to June, from 2017–18 to 2026–27 (in progress)
 - **Cycles** — 5–6 regular cycles per season, each followed by a Play Off
 - **Groups** — players are organised into skill-based groups within each cycle
 - **Clubs** — Haza, CRC, Sohail, Cerrado
