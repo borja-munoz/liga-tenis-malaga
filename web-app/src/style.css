@@ -1262,11 +1262,14 @@ button {
 
 .group-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .group-nav__title { text-align: center; display: flex; flex-direction: column; gap: 2px; }
+/* Mobile: the "my group" chip goes on its own line under the arrows */
+.group-nav { flex-wrap: wrap; }
+.group-nav__mine { order: 4; margin: 0 auto; text-decoration: none; }
+@media (min-width: 900px) {
+  .group-nav__mine { order: 0; }
+}
 .icon-button.is-disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 
-.group-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
-.group-tools .chip { text-decoration: none; }
-.group-tools__search { flex: 1 1 200px; min-width: 0; }
 
 .standings { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
 .standings th {
@@ -1307,17 +1310,22 @@ button {
 .group-results { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); align-content: start; }
 .pending-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); align-content: start; }
 .pending-list li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  /* Items stack the two names when they get narrow (see below) */
+  container-type: inline-size;
   padding: 10px 12px;
   border-radius: 12px;
   font-size: 13px;
   color: var(--text-2);
   border: 1px dashed rgba(255, 255, 255, 0.18);
 }
-.pending-list li > span:not(.pending-list__vs) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pending-list li > span:last-child { text-align: right; }
+.pending-match { display: flex; align-items: center; gap: 8px; }
+.pending-match__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pending-match__name:last-child { text-align: right; }
+@container (max-width: 250px) {
+  .pending-match { flex-wrap: wrap; row-gap: 2px; }
+  .pending-match__name:first-child { flex: 1 1 100%; }
+  .pending-match__name:last-child { text-align: left; }
+}
 .pending-list__vs { flex: none; font-size: 11px; color: var(--text-3); }
 .pending-list li.is-me { border-color: rgba(255, 214, 10, 0.55); color: var(--text); }
 
@@ -1346,57 +1354,52 @@ button {
 .cycles__note { margin-top: 10px; }
 .page--home { width: 100%; box-sizing: border-box; }
 
-/* Mobile: one column (hero, standings, played, pending). Desktop: 2 × 2 grid */
+/* Mobile: one column (hero, standings, played, pending). Desktop: two
+   columns, the cycle and the standings on the left, the played and
+   pending matches on the right */
 .home-grid { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+.home-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
 .standings-head { display: flex; flex-direction: column; }
-/* Desktop: the cycle as a strip on top; standings and pending matches in a
-   narrow column on the left; the group matches fill the rest, 2 per row */
 @media (min-width: 900px) {
-  .home-grid {
-    gap: 24px;
-    grid-template-columns: minmax(0, clamp(340px, 40%, 620px)) minmax(0, 1fr);
-    grid-template-areas: "hero hero" "standings results" "pending results";
-    grid-template-rows: auto auto 1fr;
-  }
-  .home-grid > .cycle-hero { grid-area: hero; height: auto; }
-  .home-grid > .standings-card { grid-area: standings; }
-  .home-grid > .results-card { grid-area: results; }
-  .home-grid > .pending-card { grid-area: pending; }
+  .home-grid { gap: 24px; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+  .home-col { gap: 24px; }
+  .home-col > .cycle-hero { height: auto; }
 
-  .cycle-hero { flex-direction: row; align-items: center; justify-content: space-between; gap: 32px; }
+  .cycle-hero { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 32px; row-gap: 12px; }
   .cycle-hero__title { font-size: 28px; }
-  .cycle-hero__progress { flex: 0 1 520px; }
+  .cycle-hero__progress { flex: 1 1 260px; }
 
-  .standings-head { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-  .standings-head .group-nav { justify-content: flex-start; margin: 0; }
-  .standings-head .group-nav__title { min-width: 96px; }
-  .standings-head .group-tools { flex: 1 1 200px; justify-content: flex-end; margin: 0; }
-  .standings-head .group-tools__search { flex: 1 1 200px; max-width: 340px; }
+  /* Arrows around the group menu, then the "my group" chip */
+  .standings-head { gap: 12px; margin-bottom: 12px; }
+  .standings-head .group-nav { margin: 0; justify-content: flex-start; }
+  .standings-head .group-nav__title { min-width: 110px; }
+  .standings-head .group-nav__mine { margin: 0 0 0 8px; }
   .results-card .group-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .pending-card .pending-list { grid-template-columns: minmax(0, 1fr); }
+  .pending-card .pending-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ---------- Desktop fit: current cycle and player hero ---------- */
 @media (min-width: 900px) and (min-height: 600px) {
-  /* Current cycle: the strip takes its height, the standings what they
-     need (up to the space available, then they scroll), and the pending
-     and played lists the rest, scrolling inside their cards */
-  .page--home .home-grid {
-    flex: 1 1 0;
-    min-height: 0;
-    gap: var(--fit-gap);
-    grid-template-rows: auto minmax(0, max-content) minmax(clamp(90px, 16vh, 200px), 1fr);
-  }
-  .page--home .home-grid > * { min-height: 0; box-sizing: border-box; }
+  /* Current cycle: each column fills the height. Every card starts at the
+     height of its content; when a column runs out of room its cards
+     shrink in proportion to their content (so played and pending matches
+     share the right column by how much each list holds) and scroll inside */
+  .page--home .home-grid { flex: 1 1 0; min-height: 0; gap: var(--fit-gap); grid-template-rows: minmax(0, 1fr); }
+  .page--home .home-col { min-height: 0; gap: var(--fit-gap); }
+  .page--home .home-col > * { flex: 0 1 auto; min-height: 0; box-sizing: border-box; }
+  .page--home .home-col--matches > * { flex-grow: 1; }
+  .page--home .home-col > .cycle-hero { flex-shrink: 0; }
+  .page--home .pending-list li { padding-top: clamp(6px, 1.1vh, 10px); padding-bottom: clamp(6px, 1.1vh, 10px); }
   .page--home .me-prompt { padding-top: clamp(10px, 1.6vh, 20px); padding-bottom: clamp(10px, 1.6vh, 20px); }
   .page--home .standings-card { display: flex; flex-direction: column; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.25) transparent; }
-  .page--home .standings-head { margin-bottom: clamp(6px, 1.2vh, 12px); }
+  .page--home .standings-head { gap: clamp(8px, 1.4vh, 14px); margin-bottom: clamp(6px, 1.2vh, 12px); }
   .page--home .standings-head .icon-button { width: clamp(36px, 5vh, 44px); height: clamp(36px, 5vh, 44px); }
-  .page--home .standings-head .search-field { height: clamp(38px, 5vh, 46px); }
   .page--home .standings td { padding-top: clamp(4px, 1vh, 10px); padding-bottom: clamp(4px, 1vh, 10px); }
   .page--home .standings th { padding-bottom: clamp(4px, 0.8vh, 8px); }
   .page--home .standings__note { margin-top: clamp(4px, 1vh, 10px); }
-  .page--home .cycle-hero { padding: clamp(12px, 2vh, 22px) clamp(20px, 2vw, 28px); }
+  .page--home .cycle-hero { padding: clamp(12px, 2vh, 22px) clamp(20px, 2vw, 28px); row-gap: clamp(6px, 1.2vh, 12px); }
+  .page--home .cycle-hero__progress { gap: clamp(3px, 0.6vh, 6px); }
+  .page--home .cycle-hero__updated { margin-top: 0; }
   .page--home .cycle-hero__title { font-size: clamp(20px, 3vh, 28px); margin: clamp(2px, 0.4vh, 4px) 0; }
   .page--home .results-card,
   .page--home .pending-card { display: flex; flex-direction: column; overflow: hidden; gap: clamp(8px, 1.4vh, 12px); }
@@ -1460,3 +1463,72 @@ button {
     .page--player .summary-card .bar__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   }
 }
+
+/* ---------- Group menu (the group title opens a list of every group) ---------- */
+.group-menu { position: relative; }
+.group-menu__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  margin: -2px -8px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.group-menu__button:hover,
+.group-menu__button[aria-expanded="true"] { background: rgba(255, 255, 255, 0.08); }
+.group-menu__chevron { font-size: 0.7em; color: var(--yellow); }
+.group-menu__list {
+  position: fixed;
+  z-index: 20;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: linear-gradient(var(--navy-750), var(--navy-850)) padding-box, var(--chrome-soft) border-box;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  text-align: left;
+}
+.group-menu__item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-2);
+}
+.group-menu__item:hover,
+.group-menu__item:focus-visible { background: rgba(255, 255, 255, 0.08); outline: none; }
+.group-menu__item.is-current { background: rgba(255, 214, 10, 0.14); }
+.group-menu__number {
+  flex: none;
+  min-width: 34px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+.group-menu__item.is-current .group-menu__number,
+.group-menu__item.is-mine .group-menu__number { color: var(--yellow); }
+.group-menu__me {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--navy-900);
+  background: var(--gold-fill);
+  vertical-align: 2px;
+}
+.group-menu__players { font-size: 12px; line-height: 1.4; color: var(--text-3); }

@@ -1,5 +1,5 @@
-import { CSSProperties, useMemo, useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { CSSProperties, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import {
@@ -81,8 +81,6 @@ interface CycleViewProps {
 
 function CycleView({ cycle, groups, group, results, meId, meGroup }: CycleViewProps) {
   const intl = useIntl();
-  const navigate = useNavigate();
-  const [notPlaying, setNotPlaying] = useState<string | null>(null);
 
   const numbers = [...groups.keys()];
   const players = group != null ? groups.get(group) ?? [] : [];
@@ -98,17 +96,6 @@ function CycleView({ cycle, groups, group, results, meId, meGroup }: CycleViewPr
   const matches = useMemo(() => groupResults.map((r) => fromPointOfView(r, meId)), [groupResults, meId]);
   const pending = useMemo(() => pendingMatches(players, groupResults), [players, groupResults]);
 
-  const findGroup = (playerId: number, name: string) => {
-    for (const [number, rows] of groups) {
-      if (rows.some((r) => r.playerId === playerId)) {
-        setNotPlaying(null);
-        navigate(groupPath(number));
-        return;
-      }
-    }
-    setNotPlaying(name);
-  };
-
   return (
     <main className="page page--home page--fit">
       <h1 className="visually-hidden">
@@ -117,104 +104,199 @@ function CycleView({ cycle, groups, group, results, meId, meGroup }: CycleViewPr
 
       {meId == null && <MePrompt />}
 
-      {/* Desktop: a grid sized to the viewport; the lists scroll inside their cards */}
+      {/* Desktop: two columns sized to the viewport (cycle + standings | played + pending) */}
       <div className="home-grid">
-        <CycleHero cycle={cycle} played={results.length} total={totalMatches} />
+        <div className="home-col home-col--group">
+          <CycleHero cycle={cycle} played={results.length} total={totalMatches} />
 
-        <section className="card standings-card" aria-labelledby="standings-title">
-          <div className="standings-head">
-            <div className="group-nav">
-              <Link
-                to={prev != null ? groupPath(prev) : "#"}
-                className={"icon-button" + (prev == null ? " is-disabled" : "")}
-                aria-disabled={prev == null}
-                aria-label={intl.formatMessage({ id: "home.prevGroup" })}
-                onClick={(e) => prev == null && e.preventDefault()}
-              >
-                <BackIcon />
-              </Link>
-              <div className="group-nav__title">
-                <h2 id="standings-title" className="card__title">
-                  <FormattedMessage id="player.group" values={{ group }} />
-                </h2>
-                <span className="card__hint">
-                  <FormattedMessage id="home.groupOf" values={{ count: numbers.length }} />
-                </span>
-              </div>
-              <Link
-                to={next != null ? groupPath(next) : "#"}
-                className={"icon-button" + (next == null ? " is-disabled" : "")}
-                aria-disabled={next == null}
-                aria-label={intl.formatMessage({ id: "home.nextGroup" })}
-                onClick={(e) => next == null && e.preventDefault()}
-              >
-                <ForwardIcon />
-              </Link>
-            </div>
-
-            <div className="group-tools">
-              {meGroup != null && meGroup !== group && (
-                <Link to={groupPath(meGroup)} className="chip is-active">
-                  <FormattedMessage id="home.myGroup" values={{ group: meGroup }} />
+          <section className="card standings-card" aria-labelledby="standings-title">
+            <div className="standings-head">
+              <div className="group-nav">
+                <Link
+                  to={prev != null ? groupPath(prev) : "#"}
+                  className={"icon-button" + (prev == null ? " is-disabled" : "")}
+                  aria-disabled={prev == null}
+                  aria-label={intl.formatMessage({ id: "home.prevGroup" })}
+                  onClick={(e) => prev == null && e.preventDefault()}
+                >
+                  <BackIcon />
                 </Link>
-              )}
-              <PlayerSearch
-                id="group-player-search"
-                className="group-tools__search"
-                label={intl.formatMessage({ id: "home.findGroup" })}
-                hideLabel
-                compact
-                value={null}
-                onSelect={(p) => findGroup(p.id, p.name)}
-              />
+                <GroupMenu groups={groups} group={group} meGroup={meGroup} />
+                <Link
+                  to={next != null ? groupPath(next) : "#"}
+                  className={"icon-button" + (next == null ? " is-disabled" : "")}
+                  aria-disabled={next == null}
+                  aria-label={intl.formatMessage({ id: "home.nextGroup" })}
+                  onClick={(e) => next == null && e.preventDefault()}
+                >
+                  <ForwardIcon />
+                </Link>
+                {meGroup != null && meGroup !== group && (
+                  <Link to={groupPath(meGroup)} className="chip is-active group-nav__mine">
+                    <FormattedMessage id="home.myGroup" values={{ group: meGroup }} />
+                  </Link>
+                )}
+              </div>
             </div>
-          </div>
-          {notPlaying && (
-            <p className="card__hint standings__status" role="status">
-              <FormattedMessage id="home.notPlaying" values={{ name: notPlaying }} />
-            </p>
-          )}
 
-          <StandingsTable rows={players} group={group} meId={meId} provisional={cycle.inProgress} />
-        </section>
+            <StandingsTable rows={players} group={group} meId={meId} provisional={cycle.inProgress} />
+          </section>
+        </div>
 
-        <section className="card card--stack results-card" aria-labelledby="results-title">
-          <div className="card__head">
-            <h2 id="results-title" className="card__title"><FormattedMessage id="home.resultsTitle" /></h2>
-            <span className="card__hint">
-              <FormattedMessage
-                id="home.resultsCount"
-                values={{ played: matches.length, total: matches.length + pending.length }}
-              />
-            </span>
-          </div>
-          {matches.length === 0 && <p className="card__hint"><FormattedMessage id="home.noResults" /></p>}
-          <div className="card__scroll group-results">
-            {matches.map(({ match, neutral }) => (
-              <MatchCard key={match.key} match={match} context={match.club ?? ""} neutral={neutral} />
-            ))}
-          </div>
-        </section>
+        <div className="home-col home-col--matches">
 
-        <section className="card card--stack pending-card" aria-labelledby="pending-title">
-          <div className="card__head">
-            <h2 id="pending-title" className="card__title">
-              <FormattedMessage id="home.pendingTitle" values={{ count: pending.length }} />
-            </h2>
-          </div>
-          {pending.length === 0 && <p className="card__hint"><FormattedMessage id="home.nonePending" /></p>}
-          <ul className="card__scroll pending-list">
-            {pending.map(([a, b]) => (
-              <li key={`${a.playerId}-${b.playerId}`} className={isMe(a, b, meId) ? "is-me" : undefined}>
-                <span>{a.name}</span>
-                <span className="pending-list__vs">vs</span>
-                <span>{b.name}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+          <section className="card card--stack results-card" aria-labelledby="results-title">
+            <div className="card__head">
+              <h2 id="results-title" className="card__title"><FormattedMessage id="home.resultsTitle" /></h2>
+              <span className="card__hint">
+                <FormattedMessage
+                  id="home.resultsCount"
+                  values={{ played: matches.length, total: matches.length + pending.length }}
+                />
+              </span>
+            </div>
+            {matches.length === 0 && <p className="card__hint"><FormattedMessage id="home.noResults" /></p>}
+            <div className="card__scroll group-results">
+              {matches.map(({ match, neutral }) => (
+                <MatchCard key={match.key} match={match} context={match.club ?? ""} neutral={neutral} />
+              ))}
+            </div>
+          </section>
+
+          <section className="card card--stack pending-card" aria-labelledby="pending-title">
+            <div className="card__head">
+              <h2 id="pending-title" className="card__title">
+                <FormattedMessage id="home.pendingTitle" values={{ count: pending.length }} />
+              </h2>
+            </div>
+            {pending.length === 0 && <p className="card__hint"><FormattedMessage id="home.nonePending" /></p>}
+            <ul className="card__scroll pending-list">
+              {pending.map(([a, b]) => (
+                <li key={`${a.playerId}-${b.playerId}`} className={isMe(a, b, meId) ? "is-me" : undefined}>
+                  <div className="pending-match">
+                    <span className="pending-match__name">{a.name}</span>
+                    <span className="pending-list__vs">vs</span>
+                    <span className="pending-match__name">{b.name}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
       </div>
     </main>
+  );
+}
+
+/**
+ * The group title opens a list of every group with its players, to jump
+ * straight to one. Positioned against the viewport so the card's own
+ * scrolling never clips it.
+ */
+function GroupMenu({
+  groups,
+  group,
+  meGroup,
+}: {
+  groups: Map<number, GroupStanding[]>;
+  group: number | null;
+  meGroup: number | null;
+}) {
+  const intl = useIntl();
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState<CSSProperties>({});
+  const rootRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const currentRef = useRef<HTMLAnchorElement>(null);
+
+  // A new group closes the menu
+  useEffect(() => setOpen(false), [group]);
+
+  useLayoutEffect(() => {
+    if (!open || !buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const width = Math.min(380, window.innerWidth - 32);
+    const left = Math.min(Math.max(rect.left + rect.width / 2 - width / 2, 16), window.innerWidth - width - 16);
+    const top = rect.bottom + 8;
+    setPosition({ top, left, width, maxHeight: Math.max(160, window.innerHeight - top - 16) });
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    currentRef.current?.scrollIntoView({ block: "nearest" });
+    currentRef.current?.focus({ preventScroll: true });
+    const close = () => setOpen(false);
+    const onPointerDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) close();
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        close();
+        buttonRef.current?.focus();
+      }
+    };
+    // The list has its own scroll; anything else scrolling moves the button away
+    const onScroll = (e: Event) => {
+      if (!rootRef.current?.contains(e.target as Node)) close();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", close);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", close);
+    };
+  }, [open]);
+
+  return (
+    <div className="group-nav__title group-menu" ref={rootRef}>
+      <h2 id="standings-title" className="card__title">
+        <button
+          ref={buttonRef}
+          type="button"
+          className="group-menu__button"
+          aria-expanded={open}
+          aria-controls="group-menu-list"
+          title={intl.formatMessage({ id: "home.chooseGroup" })}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <FormattedMessage id="player.group" values={{ group }} />
+          <span className="group-menu__chevron" aria-hidden="true">▾</span>
+        </button>
+      </h2>
+      {open && (
+        <ul id="group-menu-list" className="group-menu__list" style={position}>
+          {[...groups].map(([number, rows]) => (
+            <li key={number}>
+              <Link
+                ref={number === group ? currentRef : undefined}
+                to={groupPath(number)}
+                className={
+                  "group-menu__item" +
+                  (number === group ? " is-current" : "") +
+                  (number === meGroup ? " is-mine" : "")
+                }
+                aria-current={number === group ? "page" : undefined}
+                onClick={() => setOpen(false)}
+              >
+                <span className="group-menu__number">
+                  G{number}
+                  {number === meGroup && (
+                    <span className="group-menu__me">
+                      <FormattedMessage id="home.youTag" />
+                    </span>
+                  )}
+                </span>
+                <span className="group-menu__players">{rows.map((r) => r.name).join(" · ")}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
 

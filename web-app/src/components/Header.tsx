@@ -1,7 +1,7 @@
 import { Link, matchPath, useLocation, useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 
-import { useCurrentCycle } from "../models/model";
+import { useCurrentCycle, useCycleStandings } from "../models/model";
 import { getLastPlayerId, parseId } from "../lib/lastPlayer";
 import { groupPath, h2hPath, playerPath } from "../routes";
 import { BallLogo } from "./Icons";
@@ -12,6 +12,8 @@ export default function Header() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { current } = useCurrentCycle();
+  // Cached by React Query: the same query as the cycle page
+  const { data: standings } = useCycleStandings(current);
 
   const playerMatch = matchPath("/player/:playerId/*", pathname) ?? matchPath("/player/:playerId", pathname);
   const h2hMatch = matchPath("/h2h/:playerA/*", pathname) ?? matchPath("/h2h/:playerA", pathname);
@@ -21,6 +23,13 @@ export default function Header() {
 
   const routePlayerId = parseId(playerMatch?.params.playerId ?? h2hMatch?.params.playerA);
   const playerId = routePlayerId ?? getLastPlayerId();
+
+  // On the cycle page the search opens the player's group (or their page
+  // when they don't play this cycle); elsewhere it opens their page
+  const onSearchSelect = (id: number) => {
+    const group = isCycleSection ? standings?.find((s) => s.playerId === id)?.group : undefined;
+    navigate(group != null ? groupPath(group) : playerPath(id));
+  };
 
   return (
     <header className="app-header">
@@ -56,14 +65,14 @@ export default function Header() {
           </Link>
         </nav>
 
-        {isPlayerSection && !pathname.endsWith("/matches") && (
+        {(isCycleSection || (isPlayerSection && !pathname.endsWith("/matches"))) && (
           <PlayerSearch
             id="header-player-search"
             className="header-search"
-            label={intl.formatMessage({ id: "search.players" })}
+            label={intl.formatMessage({ id: isCycleSection ? "home.findGroup" : "search.players" })}
             hideLabel={false}
             value={routePlayerId}
-            onSelect={(player) => navigate(playerPath(player.id))}
+            onSelect={(player) => onSearchSelect(player.id)}
           />
         )}
 
