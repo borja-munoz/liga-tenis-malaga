@@ -81,13 +81,13 @@ INSERT INTO player_aliases (alias, canonical) VALUES
   -- José Alejandro Lopez
   ('Jose Alejandro Lopez', 'José Alejandro Lopez'),
   -- José Cantero
-  ('Jose Cantero', 'José Cantero'),
+  ('Jose Cantero', 'Jose María Cantero'),
   -- José Madrid
   ('Jose Madrid', 'José Madrid'),
   -- José Manuel Gajate
   ('Jose Manuel Gajate', 'José Manuel Gajate'),
   -- José Segura
-  ('Jose Segura', 'José Segura'),
+  ('Jose Segura', 'Jose Segura Guerrero'),
   -- José Sánchez Nieto
   ('Jose Sanchez Nieto', 'José Sánchez Nieto'),
   ('Jose Sánchez Nieto', 'José Sánchez Nieto'),
@@ -101,7 +101,7 @@ INSERT INTO player_aliases (alias, canonical) VALUES
   -- Nacho García
   ('Nacho Garcia', 'Nacho García'),
   -- Nicolás Lemolo
-  ('Nicolas Lemolo', 'Nicolás Lemolo'),
+  ('Nicolas Lemolo', 'Nicolás Iemolo'),
   -- Raúl Liébana
   ('Raul Liebana', 'Raúl Liébana'),
   -- Raúl Lorente
@@ -113,7 +113,7 @@ INSERT INTO player_aliases (alias, canonical) VALUES
   -- Rustam Abduraufov
   ('Rustam Abduraufov ', 'Rustam Abduraufov'),
   -- Salvador González
-  ('Salvador Gonzalez', 'Salvador González'),
+  ('Salvador Gonzalez', 'Salvador González Novoa'),
   -- Santiago del Rio
   ('Santiago Del Rio', 'Santiago del Rio'),
   -- Sebastián Prieto
@@ -123,7 +123,106 @@ INSERT INTO player_aliases (alias, canonical) VALUES
   -- Álvaro Santos
   ('Alvaro Santos', 'Álvaro Santos'),
   -- Álvaro Serrano
-  ('Alvaro Serrano', 'Álvaro Serrano');
+  ('Alvaro Serrano', 'Álvaro Serrano'),
+  -- Variants reviewed manually (accents, typos, initials,
+  -- short vs full names)
+  ('Antonio Calderon', 'Antonio Calderón'),
+  ('Antonio Ramírez', 'Antonio Ramírez Medina'),
+  ('Antonio Ramirez', 'Antonio Ramírez Medina'),
+  ('Axel Lopez', 'Áxel López'),
+  ('Cristobal Gómez', 'Cristóbal Gómez'),
+  ('Daniel Fernandez', 'Daniel Fernández'),
+  ('Eduardo Leon', 'Eduardo León'),
+  ('Francisco Garcia', 'Francisco García'),
+  ('Jesus Ramírez', 'Jesús Ramírez'),
+  ('Jesus Vázquez', 'Jesús Vazquez'),
+  ('Jose Cano', 'José Cano'),
+  ('Jose Carlos Torres', 'José Carlos Torres'),
+  ('José Carlos Torres (lesionado', 'José Carlos Torres'),
+  ('Jose Maria del Pino', 'José María del Pino'),
+  ('Jose Ugart', 'José Ugart'),
+  ('Leandro', 'Leandro Nicolini'),
+  ('Leandro ', 'Leandro Nicolini'),
+  ('Manuel Chaneta ', 'Manuel Chaneta'),
+  ('Matías Suarez', 'Matías Suárez'),
+  ('Miguel Angel Ramos', 'Miguel Ángel Ramos'),
+  ('Miguel Martin', 'Miguel Martín'),
+  ('Nicolas Multisanti', 'Nicolás Multisanti'),
+  ('Pablo Garcia', 'Pablo García'),
+  ('Ruben Jiménez', 'Rubén Jiménez'),
+  ('Tomas Mazowski', 'Tomás Mazowski'),
+  ('Dennis Kranendok', 'Dennis Kranendonk'),
+  ('Filippo Gioielo', 'Filippo Gioiello'),
+  ('Gustavo Garcí', 'Gustavo García'),
+  ('Guy Wynter', 'Guy Winter'),
+  ('Jussie Toivanen', 'Jussi Toivanen'),
+  ('Steffano Brunetti', 'Stefano  Brunetti'),
+  ('Nicolás Lemolo', 'Nicolás Iemolo'),
+  ('David del Prado', 'David de Prado'),
+  ('David de Prado Rodríguez', 'David de Prado'),
+  ('Pedro Javier Rodríguez XX', 'Pedro Javier Rodríguez'),
+  ('Guillermo Martín', 'Guillermo Martín Carro'),
+  ('Guillero Martin', 'Guillermo Martín Carro'),
+  ('Jose I. Medina', 'Jose Ignacio Medina'),
+  ('José Ignacio Medina Spiteri', 'Jose Ignacio Medina'),
+  ('Miguel A. Vargas', 'Miguel Ángel Vargas'),
+  ('Miguel Angel Vargas Campaña', 'Miguel Ángel Vargas'),
+  ('Juan A. Tabernero', 'Juan Antonio Tabernero'),
+  ('Juan A. Muñoz', 'Juan Andrés Muñoz'),
+  ('Jose A. Rivero', 'José Andrés Rivero'),
+  ('Jose M. Gajate', 'José Manuel Gajate'),
+  ('Jose Gajate', 'José Manuel Gajate'),
+  ('Daniel F. Tamayo', 'Daniel Fernández Tamayo'),
+  ('José Cantero', 'Jose María Cantero'),
+  ('Jose M. Cantero', 'Jose María Cantero'),
+  ('Antonio Mora', 'Antonio Mora-Figueroa'),
+  ('Antonio Pelaez', 'Antonio Peláez Aguilera'),
+  ('Carlos Perez', 'Carlos Pérez Merino'),
+  ('Carlos Merino', 'Carlos Pérez Merino'),
+  ('Cesar Henry', 'Cesar Henry Sotomayor'),
+  ('Cesar Sotomayor', 'Cesar Henry Sotomayor'),
+  ('Curro Ramos', 'Curro Ramos Olmedo'),
+  ('Daniel Jimenez Rodriguez', 'Daniel Jimenez'),
+  ('David Andres', 'David Andrés Pérez'),
+  ('Eduardo Ariza', 'Eduardo Ariza Tello'),
+  ('Enrique Monereo López', 'Enrique Monereo'),
+  ('Fernando Arias Barrón', 'Fernando Arias'),
+  ('Francisco de Paula', 'Francisco de Paula García'),
+  ('German Raul', 'Germán Raúl Cebrián'),
+  ('Germán Cebrián', 'Germán Raúl Cebrián'),
+  ('Ignacio Moreno', 'Ignacio Moreno Dávila'),
+  ('Javier Ariño', 'Javier Ariño García'),
+  ('Javier Urbieta', 'Javier Urbieta Arias'),
+  ('Javier Del Pino', 'Javier del Pino Romero'),
+  ('Jorge Cejudo', 'Jorge Cejudo Sempere'),
+  ('Jose Castro', 'Jose Castro Rojas'),
+  ('Jose Manuel Castro', 'Jose Castro Rojas'),
+  ('José Segura', 'Jose Segura Guerrero'),
+  ('José Madrid Márquez', 'José Madrid'),
+  ('Jose Rodriguez', 'José Rodriguez Vega'),
+  ('Juan Bautista', 'Juan Bautista García Collado'),
+  ('Luis Gil', 'Luis Gil-Delgado'),
+  ('Luis Mesa Garcia', 'Luis Mesa'),
+  ('Maria Fernanda', 'Maria Fernanda Quinto'),
+  ('Miguel Erik Garcia', 'Miguel Erik'),
+  ('Miguel Martín Pérez', 'Miguel Martín'),
+  ('Oscar Pacheco Crincoli', 'Oscar Pacheco'),
+  ('Pedro Parada', 'Pedro Parada Avendaño'),
+  ('Ricardo Ramos', 'Ricardo Ramos Ruiz'),
+  ('Ricardo Toma', 'Ricardo Toma Freitag'),
+  ('Roberto Gomar', 'Roberto Gomar Monio'),
+  ('Salvador González', 'Salvador González Novoa'),
+  ('Salvador Ruiz Vera', 'Salvador Ruiz'),
+  ('Santiago Ventoso', 'Santiago Ventoso Faccio'),
+  ('Manuel Santos de la Coba', 'Manuel de la Coba'),
+  ('Javier Silva', 'Javier Silva Silva'),
+  ('Manuel Solla', 'Manu Solla'),
+  ('Manu', 'Manu Solla'),
+  ('Baldo', 'Baldo Foxo'),
+  ('Josemi', 'Josemi Ortiz'),
+  ('Renato', 'Renato García'),
+  ('Rustam', 'Rustam Abduraufov'),
+  ('Vidal', 'Vidal Claramonte');
 
 -- Fail if any alias or canonical name does not exist (e.g. a typo or
 -- a player renamed in the source data), instead of silently skipping it
@@ -134,6 +233,13 @@ FROM (
   SELECT canonical FROM player_aliases
 ) names
 WHERE n NOT IN (SELECT name FROM players)
+HAVING count(*) > 0;
+
+-- Fail if a canonical name is also an alias: the merge is applied in a
+-- single pass, so chains (A -> B -> C) must point straight to C
+SELECT error('Canonical names that are also aliases: ' || string_agg(DISTINCT canonical, ', '))
+FROM player_aliases
+WHERE canonical IN (SELECT alias FROM player_aliases)
 HAVING count(*) > 0;
 
 CREATE TEMP TABLE player_merge AS
