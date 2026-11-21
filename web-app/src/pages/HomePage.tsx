@@ -110,107 +110,110 @@ function CycleView({ cycle, groups, group, results, meId, meGroup }: CycleViewPr
   };
 
   return (
-    <main className="page page--home">
+    <main className="page page--home page--fit">
       <h1 className="visually-hidden">
         <FormattedMessage id="season.withCycle" values={{ season: cycle.season, cycle: cycle.cycle }} />
       </h1>
 
       {meId == null && <MePrompt />}
 
-      <div className="layout-row">
-        <section className="col-side">
-          <CycleHero cycle={cycle} played={results.length} total={totalMatches} />
-        </section>
+      {/* Desktop: a grid sized to the viewport; the lists scroll inside their cards */}
+      <div className="home-grid">
+        <CycleHero cycle={cycle} played={results.length} total={totalMatches} />
 
-        <section className="card col-main" aria-labelledby="standings-title">
-          <div className="group-nav">
-            <Link
-              to={prev != null ? groupPath(prev) : "#"}
-              className={"icon-button" + (prev == null ? " is-disabled" : "")}
-              aria-disabled={prev == null}
-              aria-label={intl.formatMessage({ id: "home.prevGroup" })}
-              onClick={(e) => prev == null && e.preventDefault()}
-            >
-              <BackIcon />
-            </Link>
-            <div className="group-nav__title">
-              <h2 id="standings-title" className="card__title">
-                <FormattedMessage id="player.group" values={{ group }} />
-              </h2>
-              <span className="card__hint">
-                <FormattedMessage id="home.groupOf" values={{ count: numbers.length }} />
-              </span>
-            </div>
-            <Link
-              to={next != null ? groupPath(next) : "#"}
-              className={"icon-button" + (next == null ? " is-disabled" : "")}
-              aria-disabled={next == null}
-              aria-label={intl.formatMessage({ id: "home.nextGroup" })}
-              onClick={(e) => next == null && e.preventDefault()}
-            >
-              <ForwardIcon />
-            </Link>
-          </div>
-
-          <div className="group-tools">
-            {meGroup != null && meGroup !== group && (
-              <Link to={groupPath(meGroup)} className="chip is-active">
-                <FormattedMessage id="home.myGroup" values={{ group: meGroup }} />
+        <section className="card standings-card" aria-labelledby="standings-title">
+          <div className="standings-head">
+            <div className="group-nav">
+              <Link
+                to={prev != null ? groupPath(prev) : "#"}
+                className={"icon-button" + (prev == null ? " is-disabled" : "")}
+                aria-disabled={prev == null}
+                aria-label={intl.formatMessage({ id: "home.prevGroup" })}
+                onClick={(e) => prev == null && e.preventDefault()}
+              >
+                <BackIcon />
               </Link>
-            )}
-            <PlayerSearch
-              id="group-player-search"
-              className="group-tools__search"
-              label={intl.formatMessage({ id: "home.findGroup" })}
-              hideLabel
-              compact
-              value={null}
-              onSelect={(p) => findGroup(p.id, p.name)}
-            />
+              <div className="group-nav__title">
+                <h2 id="standings-title" className="card__title">
+                  <FormattedMessage id="player.group" values={{ group }} />
+                </h2>
+                <span className="card__hint">
+                  <FormattedMessage id="home.groupOf" values={{ count: numbers.length }} />
+                </span>
+              </div>
+              <Link
+                to={next != null ? groupPath(next) : "#"}
+                className={"icon-button" + (next == null ? " is-disabled" : "")}
+                aria-disabled={next == null}
+                aria-label={intl.formatMessage({ id: "home.nextGroup" })}
+                onClick={(e) => next == null && e.preventDefault()}
+              >
+                <ForwardIcon />
+              </Link>
+            </div>
+
+            <div className="group-tools">
+              {meGroup != null && meGroup !== group && (
+                <Link to={groupPath(meGroup)} className="chip is-active">
+                  <FormattedMessage id="home.myGroup" values={{ group: meGroup }} />
+                </Link>
+              )}
+              <PlayerSearch
+                id="group-player-search"
+                className="group-tools__search"
+                label={intl.formatMessage({ id: "home.findGroup" })}
+                hideLabel
+                compact
+                value={null}
+                onSelect={(p) => findGroup(p.id, p.name)}
+              />
+            </div>
           </div>
           {notPlaying && (
-            <p className="card__hint" role="status">
+            <p className="card__hint standings__status" role="status">
               <FormattedMessage id="home.notPlaying" values={{ name: notPlaying }} />
             </p>
           )}
 
           <StandingsTable rows={players} group={group} meId={meId} provisional={cycle.inProgress} />
         </section>
-      </div>
 
-      <section className="card card--stack" aria-labelledby="results-title">
-        <div className="card__head">
-          <h2 id="results-title" className="card__title"><FormattedMessage id="home.resultsTitle" /></h2>
-          <span className="card__hint">
-            <FormattedMessage
-              id="home.resultsCount"
-              values={{ played: matches.length, total: matches.length + pending.length }}
-            />
-          </span>
-        </div>
-        {matches.length === 0 && <p className="card__hint"><FormattedMessage id="home.noResults" /></p>}
-        <div className="group-results">
-          {matches.map(({ match, neutral }) => (
-            <MatchCard key={match.key} match={match} context={match.club ?? ""} neutral={neutral} />
-          ))}
-        </div>
-        {pending.length > 0 && (
-          <>
-            <h3 className="group-results__subtitle">
+        <section className="card card--stack results-card" aria-labelledby="results-title">
+          <div className="card__head">
+            <h2 id="results-title" className="card__title"><FormattedMessage id="home.resultsTitle" /></h2>
+            <span className="card__hint">
+              <FormattedMessage
+                id="home.resultsCount"
+                values={{ played: matches.length, total: matches.length + pending.length }}
+              />
+            </span>
+          </div>
+          {matches.length === 0 && <p className="card__hint"><FormattedMessage id="home.noResults" /></p>}
+          <div className="card__scroll group-results">
+            {matches.map(({ match, neutral }) => (
+              <MatchCard key={match.key} match={match} context={match.club ?? ""} neutral={neutral} />
+            ))}
+          </div>
+        </section>
+
+        <section className="card card--stack pending-card" aria-labelledby="pending-title">
+          <div className="card__head">
+            <h2 id="pending-title" className="card__title">
               <FormattedMessage id="home.pendingTitle" values={{ count: pending.length }} />
-            </h3>
-            <ul className="pending-list">
-              {pending.map(([a, b]) => (
-                <li key={`${a.playerId}-${b.playerId}`} className={isMe(a, b, meId) ? "is-me" : undefined}>
-                  <span>{a.name}</span>
-                  <span className="pending-list__vs">vs</span>
-                  <span>{b.name}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </section>
+            </h2>
+          </div>
+          {pending.length === 0 && <p className="card__hint"><FormattedMessage id="home.nonePending" /></p>}
+          <ul className="card__scroll pending-list">
+            {pending.map(([a, b]) => (
+              <li key={`${a.playerId}-${b.playerId}`} className={isMe(a, b, meId) ? "is-me" : undefined}>
+                <span>{a.name}</span>
+                <span className="pending-list__vs">vs</span>
+                <span>{b.name}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </main>
   );
 }

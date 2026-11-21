@@ -1253,7 +1253,7 @@ button {
 
 /* ---------- Home: current cycle ---------- */
 .cycle-hero { flex-direction: column; justify-content: space-between; gap: 18px; }
-.cycle-hero__title { font-size: 26px; }
+.cycle-hero__title { font-size: 26px; text-wrap: balance; }
 .cycle-hero__progress { width: 100%; display: flex; flex-direction: column; gap: 6px; }
 .cycle-hero__updated { font-size: 12px; color: var(--text-3); margin-top: 4px; }
 @media (min-width: 900px) {
@@ -1304,9 +1304,8 @@ button {
 .target--up { color: var(--yellow); }
 .target--down { color: var(--steel); }
 
-.group-results { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-.group-results__subtitle { font-size: 14px; font-weight: 700; margin-top: 6px; color: var(--text-2); }
-.pending-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.group-results { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); align-content: start; }
+.pending-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); align-content: start; }
 .pending-list li {
   display: flex;
   align-items: center;
@@ -1346,8 +1345,109 @@ button {
 .hero__group-link { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .cycles__note { margin-top: 10px; }
 .page--home { width: 100%; box-sizing: border-box; }
+
+/* Mobile: one column (hero, standings, played, pending). Desktop: 2 × 2 grid */
+.home-grid { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+.standings-head { display: flex; flex-direction: column; }
 @media (min-width: 900px) {
-  .page--home .col-side { flex: 0 0 min(420px, 36%); }
-  /* In the corner, so the hero (which fits the viewport) keeps its height */
-  .me-toggle { position: absolute; top: 20px; right: 24px; margin: 0; height: 28px; font-size: 12px; }
+  .home-grid {
+    gap: 24px;
+    grid-template-columns: minmax(0, 32%) minmax(0, 1fr);
+    grid-template-areas: "hero standings" "results pending";
+  }
+  .home-grid > .cycle-hero { grid-area: hero; height: auto; }
+  .home-grid > .standings-card { grid-area: standings; }
+  .home-grid > .results-card { grid-area: results; }
+  .home-grid > .pending-card { grid-area: pending; }
+  .standings-head { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .standings-head .group-nav { justify-content: flex-start; margin: 0; }
+  .standings-head .group-nav__title { min-width: 96px; }
+  .standings-head .group-tools { flex: 1 1 280px; justify-content: flex-end; margin: 0; }
+  .standings-head .group-tools__search { flex: 0 1 340px; }
+  .results-card .group-results { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- Desktop fit: current cycle and player hero ---------- */
+@media (min-width: 900px) and (min-height: 600px) {
+  /* Current cycle: the top row takes what the hero and the standings need
+     (up to the space available, then the standings scroll); the bottom row
+     takes the rest and its lists scroll inside their cards */
+  .page--home .home-grid {
+    flex: 1 1 0;
+    min-height: 0;
+    gap: var(--fit-gap);
+    grid-template-rows: minmax(0, max-content) minmax(clamp(120px, 24vh, 240px), 1fr);
+  }
+  .page--home .home-grid > * { min-height: 0; box-sizing: border-box; }
+  .page--home .me-prompt { padding-top: clamp(10px, 1.6vh, 20px); padding-bottom: clamp(10px, 1.6vh, 20px); }
+  .page--home .standings-card { display: flex; flex-direction: column; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.25) transparent; }
+  .page--home .standings-head { margin-bottom: clamp(6px, 1.2vh, 12px); }
+  .page--home .standings-head .icon-button { width: clamp(36px, 5vh, 44px); height: clamp(36px, 5vh, 44px); }
+  .page--home .standings-head .search-field { height: clamp(38px, 5vh, 46px); }
+  .page--home .standings td { padding-top: clamp(4px, 1vh, 10px); padding-bottom: clamp(4px, 1vh, 10px); }
+  .page--home .standings th { padding-bottom: clamp(4px, 0.8vh, 8px); }
+  .page--home .standings__note { margin-top: clamp(4px, 1vh, 10px); }
+  .page--home .cycle-hero { overflow: hidden; padding: clamp(16px, 2.6vh, 28px); gap: clamp(8px, 1.6vh, 18px); }
+  .page--home .cycle-hero__title { font-size: clamp(22px, 3.8vh, 34px); margin: clamp(2px, 0.6vh, 6px) 0 clamp(4px, 0.8vh, 8px); }
+  .page--home .results-card,
+  .page--home .pending-card { display: flex; flex-direction: column; overflow: hidden; gap: clamp(8px, 1.4vh, 12px); }
+
+  /* Player hero: the win ring sits next to the name (not under it), so the
+     card height no longer depends on how many lines the name takes. The
+     summary gets narrower to give the hero room */
+  .page--player .fit-row--top .col-side { flex-basis: calc(44% - var(--fit-gap) / 2); }
+  .page--player .hero { flex-direction: row; align-items: center; justify-content: space-between; gap: clamp(12px, 1.6vw, 24px); }
+  .page--player .hero > :first-child { flex: 1 1 auto; min-width: 0; }
+  .page--player .hero__name {
+    font-size: clamp(24px, min(4.6vh, 2.6vw), 44px);
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+  .page--player .hero__stats { flex: none; flex-direction: column; gap: clamp(6px, 1.2vh, 12px); }
+  .page--player .hero__counts { align-items: center; gap: clamp(1px, 0.4vh, 4px); font-size: clamp(12px, 1.7vh, 15px); }
+  .page--player .me-toggle { margin-top: clamp(6px, 1.2vh, 12px); height: clamp(26px, 3.6vh, 32px); }
+
+  .page--player .fit-row--top .summary-card {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: clamp(16px, 2vw, 28px);
+  }
+  .page--player .summary-card .card__head { grid-column: 1 / -1; }
+  /* Detail tiles as compact "label · value" rows, two per line, so long
+     labels never make them taller */
+  .page--player .summary-card .tiles--detail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: safe center;
+    gap: clamp(4px, 1vh, 10px);
+  }
+  .page--player .summary-card .tiles--detail .tile {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: clamp(4px, 0.9vh, 10px) clamp(10px, 1vw, 14px);
+    border-radius: 12px;
+  }
+  .page--player .summary-card .tiles--detail .tile__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(11px, 1.6vh, 13px);
+  }
+  .page--player .summary-card .tiles--detail .tile__value { font-size: clamp(16px, 2.6vh, 24px); }
+  .page--player .summary-card .bars { grid-template-columns: minmax(0, 1fr); align-content: safe center; margin-top: 0; gap: clamp(4px, 1.1vh, 18px); }
+  .page--player .summary-card .bar__track { margin-top: clamp(3px, 0.6vh, 6px); }
+
+  /* Narrow desktop windows: no room for the detail tiles; the bars carry the
+     same numbers (sets, games and super tie-breaks won and lost) */
+  @media (max-width: 1199.98px) {
+    .page--player .summary-card .tiles--detail { display: none; }
+    .page--player .summary-card .bars { grid-column: 1 / -1; }
+    .page--player .summary-card .bar__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  }
 }
