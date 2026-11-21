@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
-import { getEngineUrls } from "../db/duckdb";
+import { whenEngineReady } from "../db/duckdb";
 import { BallLogo, CloseIcon } from "./Icons";
 
 const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
@@ -36,15 +36,13 @@ export default function UpdatePrompt() {
     },
   });
 
-  // First install: the DuckDB engine (too big to precache) was downloaded before
-  // the service worker took control. Fetch it again through the worker so it
-  // gets cached, then tell the user the app works offline.
+  // First install: once the service worker has precached the app and the data
+  // and the DuckDB engine is stored (see db/duckdb.ts), the app works offline
   const [offlineToast, setOfflineToast] = useState(false);
   useEffect(() => {
     if (!offlineReady) return;
     let cancelled = false;
-    getEngineUrls()
-      .then((urls) => Promise.all(urls.map((url) => fetch(url).then((r) => r.blob()))))
+    whenEngineReady()
       .then(() => !cancelled && setOfflineToast(true))
       .catch(() => undefined);
     return () => {

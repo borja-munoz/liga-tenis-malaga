@@ -4602,11 +4602,8 @@ __metadata:
     vite: "npm:latest"
     vite-plugin-pwa: "npm:0.21.1"
     workbox-core: "npm:7.3.0"
-    workbox-expiration: "npm:7.3.0"
     workbox-precaching: "npm:7.3.0"
-    workbox-range-requests: "npm:7.3.0"
     workbox-routing: "npm:7.3.0"
-    workbox-strategies: "npm:7.3.0"
     workbox-window: "npm:7.3.0"
   languageName: unknown
   linkType: soft
@@ -6473,16 +6470,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-expiration@npm:7.3.0":
-  version: 7.3.0
-  resolution: "workbox-expiration@npm:7.3.0"
-  dependencies:
-    idb: "npm:^7.0.1"
-    workbox-core: "npm:7.3.0"
-  checksum: 10c0/6040d72122ece901becfcc59974586e9cc9b6309840b83b652c9f9aafe32ff89783404a431cadf6f888f80e5371252820e425ced499742964d6d68687f6fad1a
-  languageName: node
-  linkType: hard
-
 "workbox-expiration@npm:7.4.1":
   version: 7.4.1
   resolution: "workbox-expiration@npm:7.4.1"
@@ -6533,15 +6520,6 @@ __metadata:
     workbox-routing: "npm:7.4.1"
     workbox-strategies: "npm:7.4.1"
   checksum: 10c0/e1f22df8945fe8cf3b77d8c8c9fb460d8e6469dbf0dba3d372a59e9649a6272024d6e63783ceb95bfed30f634ced524f1d0d3f21979fb6e48cdaa009e9be12c5
-  languageName: node
-  linkType: hard
-
-"workbox-range-requests@npm:7.3.0":
-  version: 7.3.0
-  resolution: "workbox-range-requests@npm:7.3.0"
-  dependencies:
-    workbox-core: "npm:7.3.0"
-  checksum: 10c0/d48e1484866442864d66b1891c4965b71e997a83a7634f11452ec1a73a30a5e642e6a95d5cff45578bef4dec7a5f57bc598aeedb6189d17ca210e2c5f2898244
   languageName: node
   linkType: hard
 
