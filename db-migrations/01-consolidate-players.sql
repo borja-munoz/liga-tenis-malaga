@@ -100,6 +100,8 @@ INSERT INTO player_aliases (alias, canonical) VALUES
   ('Juan Andres Muñoz', 'Juan Andrés Muñoz'),
   -- Loren Arambula
   ('Loren Arambúla', 'Loren Arambula'),
+  -- Louis Abado
+  ('Lou Abado', 'Louis Abado'),
   -- Nacho García
   ('Nacho Garcia', 'Nacho García'),
   -- Nicolás Lemolo
